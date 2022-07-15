@@ -134,31 +134,13 @@ export default function ProposalMain() {
 
     return (
         <div className="container">
-            <div className="dataContainer">
-                <div className="header">👋 Hey there!</div>
-
-                <div className="bio">I am farza and I worked on self-driving cars so that's pretty cool right? Connect your Ethereum wallet and wave at me!</div>
-
-                <button className="waveButton" onClick={wave}>
-                    Wave at Me
-                </button>
-
-                {!currentAccount && (
-                    <button className="waveButton" onClick={connectWallet}>
-                        Connect Wallet
-                    </button>
-                )}
-
-                {allWaves.map((wave, index) => {
-                    return (
-                        <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
-                            <div>Address: {wave.address}</div>
-                            <div>Time: {wave.timestamp.toString()}</div>
-                            <div>Message: {wave.message}</div>
-                        </div>
-                    );
-                })}
-            </div>
+            <h1>Claim your NFT here</h1>
+            <button type="button" className="btn btn-primary btn-lg me-5">
+                NFT Claim
+            </button>
+            <button type="button" className="btn btn-primary btn-lg">
+                View your NFT on Opensea
+            </button>
         </div>
     );
 }

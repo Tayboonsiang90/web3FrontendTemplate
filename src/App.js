@@ -5,8 +5,10 @@ import Faucet from "./pages/Faucet";
 import Home from "./pages/Home";
 import ProposalMain from "./pages/ProposalMain";
 
+export const AddressContext = React.createContext();
+
 function App() {
-    const [currentAccount, setCurrentAccount] = useState("");
+    const [currentAccount, setCurrentAccount] = useState();
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -60,48 +62,50 @@ function App() {
 
     return (
         <Router>
-            <nav className="navbar navbar-expand-lg bg-light">
-                <div className="container-fluid">
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-                        <ul className="navbar-nav">
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/">
-                                    Live Voting
-                                </Link>
-                            </li>
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/faucet">
-                                    Rinkeby ETH Faucet
-                                </Link>
-                            </li>
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/proposallist">
-                                    NFT Claim
-                                </Link>
-                            </li>
-                        </ul>
-                        <div>
-                            <span className="me-5">{currentAccount ? "Connected to " + currentAccount : "Not connected to any wallet"}</span>
-                            <button type="button" class="btn btn-primary btn-lg" onClick={connectWallet}>
-                                {currentAccount ? "Disconnect" : "Connect to Metamask"}
-                            </button>
+            <AddressContext.Provider value={currentAccount}>
+                <nav className="navbar navbar-expand-lg bg-light">
+                    <div className="container-fluid">
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+                            <ul className="navbar-nav">
+                                <li className="nav-item h1 me-4">
+                                    <Link className="nav-link" to="/">
+                                        Live Voting
+                                    </Link>
+                                </li>
+                                <li className="nav-item h1 me-4">
+                                    <Link className="nav-link" to="/faucet">
+                                        Rinkeby ETH Faucet
+                                    </Link>
+                                </li>
+                                <li className="nav-item h1 me-4">
+                                    <Link className="nav-link" to="/proposallist">
+                                        NFT Claim
+                                    </Link>
+                                </li>
+                            </ul>
+                            <div>
+                                <span className="me-5">{currentAccount ? "Connected to " + currentAccount : "Not connected to any wallet"}</span>
+                                <button type="button" className="btn btn-primary btn-lg" onClick={connectWallet}>
+                                    {currentAccount ? "Disconnect" : "Connect to Metamask"}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </nav>
-            <Routes>
-                {/* Home route */}
-                <Route path="/" element={<Home />} />
+                </nav>
+                <Routes>
+                    {/* Home route */}
+                    <Route path="/" element={<Home />} />
 
-                {/* Faucet route */}
-                <Route path="/faucet" element={<Faucet />} />
+                    {/* Faucet route */}
+                    <Route path="/faucet" element={<Faucet />} />
 
-                {/* Proposal List Main Page route */}
-                <Route path="/proposallist" element={<ProposalMain />} />
-            </Routes>
+                    {/* Proposal List Main Page route */}
+                    <Route path="/proposallist" element={<ProposalMain />} />
+                </Routes>
+            </AddressContext.Provider>
         </Router>
     );
 }
