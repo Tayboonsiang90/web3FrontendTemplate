@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
-import { AddressContext } from "../App";
+import React from "react";
+import { useGlobalContext } from "../contexts/globalProvider";
 
 export default function Home() {
-    let currentAccount = useContext(AddressContext);
+    let message = useGlobalContext();
+
     return (
         <React.Fragment>
             <div className="container mt-5">
