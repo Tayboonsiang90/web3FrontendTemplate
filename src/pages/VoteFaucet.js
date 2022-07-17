@@ -11,6 +11,13 @@ const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 const contractAddress = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
 const contractABI = abi;
 
+// Standard sleep function
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
 export default function VoteFaucet() {
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
 
@@ -53,6 +60,8 @@ export default function VoteFaucet() {
                 console.log(claimOwnTxn.hash);
                 setTxId(claimOwnTxn.hash);
 
+                await sleep(10000);
+
                 checkAddressEthBalance(currentAccountAddress);
 
                 setFaucetFlag(false);
@@ -67,7 +76,6 @@ export default function VoteFaucet() {
             <div className="container mt-5">
                 <h1>Have no voting power? Get 100 free VOTE tokens here!</h1>
                 <h3>VOTE token represents your voting power. They can be traded, transferred, delegated. </h3>
-
                 <div className="row">
                     <div className="col borderDark">
                         <h1></h1>
@@ -76,9 +84,16 @@ export default function VoteFaucet() {
                         <h1></h1>
                     </div>
                 </div>
-                <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
-                    {faucetFlag ? "Please Wait..." : "Get 100 VOTE Tokens"}
-                </button>
+                {currentAccountVoteBal == 0 && (
+                    <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
+                        {faucetFlag ? "Please Wait..." : "Get 100 VOTE Tokens"}
+                    </button>
+                )}
+                {currentAccountVoteBal > 0 && (
+                    <button type="button" className="btn btn-primary btn-lg" disabled>
+                        You are not eligible to claim - you already have vote tokens.
+                    </button>
+                )}
                 {txId && (
                     <div>
                         100 VOTE has been sent to your connected wallet.{" "}
