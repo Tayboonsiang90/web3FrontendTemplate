@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import abi from "../utils/WavePortal.json";
+import abi from "../utils/VoteToken.json";
 
 export default function ProposalMain() {
     const [currentAccount, setCurrentAccount] = useState("");
@@ -56,7 +56,7 @@ export default function ProposalMain() {
                 console.log("Make sure you have metamask!");
                 return;
             } else {
-                console.log("We have the ethereum object", ethereum);
+                console.log("We have the ethereum object");
             }
 
             /*

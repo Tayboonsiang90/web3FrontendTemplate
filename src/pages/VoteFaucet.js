@@ -1,0 +1,93 @@
+import React, { useState } from "react";
+import { useGlobalContext } from "../contexts/globalProvider";
+import abi from "../utils/VoteToken.json";
+import { ethers } from "ethers";
+import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+
+// // Environment Variables
+// Replace with your API Key
+const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
+// Replace with address of Vote Token
+const contractAddress = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
+const contractABI = abi;
+
+export default function VoteFaucet() {
+    const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
+
+    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
+
+    const [faucetFlag, setFaucetFlag] = useState(false);
+    const [txId, setTxId] = useState("");
+
+    // Function written to update user's eth and vote token balance state for a given address
+    const checkAddressEthBalance = async (address) => {
+        try {
+            console.log("Checking User's Balance");
+            if (!window.ethereum) throw new Error("Metamask isn't found!");
+            let ethQuantity = await window.ethereum.request({
+                method: "eth_getBalance",
+                params: [address, "latest"],
+            });
+            setCurrentAccountEthBal(Number((parseInt(ethQuantity, 16) / 10 ** 18).toFixed(2)));
+
+            const data = await web3.alchemy.getTokenBalances(address, [contractAddress]);
+            setCurrentAccountVoteBal(Number((data.tokenBalances[0].tokenBalance / 10 ** 18).toFixed(2)));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const claimFaucet = async () => {
+        try {
+            const { ethereum } = window;
+
+            if (ethereum) {
+                setFaucetFlag(true);
+                console.log("Claiming VOTE Faucet... ");
+
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const voteTokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+                let claimOwnTxn = await voteTokenContract.claimOwn();
+                console.log(claimOwnTxn.hash);
+                setTxId(claimOwnTxn.hash);
+
+                checkAddressEthBalance(currentAccountAddress);
+
+                setFaucetFlag(false);
+            } else {
+                console.log("Ethereum object doesn't exist!");
+            }
+        } catch (e) {}
+    };
+
+    return (
+        <React.Fragment>
+            <div className="container mt-5">
+                <h1>Have no voting power? Get 100 free VOTE tokens here!</h1>
+                <h3>VOTE token represents your voting power. They can be traded, transferred, delegated. </h3>
+
+                <div className="row">
+                    <div className="col borderDark">
+                        <h1></h1>
+                    </div>
+                    <div className="col borderDark">
+                        <h1></h1>
+                    </div>
+                </div>
+                <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
+                    {faucetFlag ? "Please Wait..." : "Get 100 VOTE Tokens"}
+                </button>
+                {txId && (
+                    <div>
+                        100 VOTE has been sent to your connected wallet.{" "}
+                        <a href={"https://rinkeby.etherscan.io/tx/" + txId} target="_blank" rel="noreferrer">
+                            {txId}
+                        </a>
+                    </div>
+                )}
+            </div>
+        </React.Fragment>
+    );
+}

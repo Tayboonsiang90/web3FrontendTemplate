@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import React, { useEffect } from "react";
 import "./App.css";
-import Faucet from "./pages/Faucet";
+import EthFaucet from "./pages/EthFaucet";
+import VoteFaucet from "./pages/VoteFaucet";
 import Home from "./pages/Home";
 import ProposalMain from "./pages/ProposalMain";
 import { useGlobalContext } from "./contexts/globalProvider";
@@ -10,10 +11,12 @@ import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 // // Environment Variables
 // Replace with your API Key
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
+// Replace with the contract deployer address
+const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
 // Replace with address of Vote Token
-const voteTokenERC20Address = "0xe2863102F2D1a1e2F7912043383b147FFBB0CEf5";
+const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
 // Governer Contract
-const governerAddress = "0x71b51A5097BE895355d9207dd4c1CB0Fce08f3c1";
+const governerAddress = "0xe18B55eafa32De45cF5Fb2d4A55DC72B83d80175";
 
 // Standard sleep function
 function sleep(ms) {
@@ -168,8 +171,13 @@ function App() {
                                 </Link>
                             </li>
                             <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/faucet">
-                                    Rinkeby ETH Faucet
+                                <Link className="nav-link" to="/EthFaucet">
+                                    ETH Faucet
+                                </Link>
+                            </li>
+                            <li className="nav-item h1 me-4">
+                                <Link className="nav-link" to="/VoteFaucet">
+                                    VOTE Faucet
                                 </Link>
                             </li>
                             <li className="nav-item h1 me-4">
@@ -236,11 +244,11 @@ function App() {
             )}
             {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
             {currentChainId == 4 && metamaskExistCheck && !currentAccountEthBal && (
-                <div className={"alert alert-danger alert-dismissible fade show"} role="alert">
+                <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
                     <div>
                         <strong>You do not have enough ETH to make transactions. Get some ETH from the faucet! </strong>
                         <button className="btn btn-primary">
-                            <Link className="nav-link" to="/faucet">
+                            <Link className="nav-link" to="/EthFaucet">
                                 Rinkeby ETH Faucet
                             </Link>
                         </button>
@@ -249,12 +257,30 @@ function App() {
                     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             )}
+            {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
+            {currentChainId == 4 && metamaskExistCheck && !currentAccountVoteBal && (
+                <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
+                    <div>
+                        <strong>You do not have enough VOTE to make any vote. Get 100 VOTE from the faucet! </strong>
+                        <button className="btn btn-primary">
+                            <Link className="nav-link" to="/VoteFaucet">
+                                VOTE Faucet
+                            </Link>
+                        </button>
+                    </div>
+                    <div>You will not be able to vote until you get some VOTE tokens. </div>
+                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            )}
             <Routes>
                 {/* Home route */}
                 <Route path="/" element={<Home />} />
 
-                {/* Faucet route */}
-                <Route path="/faucet" element={<Faucet />} />
+                {/* EthFaucet route */}
+                <Route path="/EthFaucet" element={<EthFaucet />} />
+
+                {/* VoteFaucet route */}
+                <Route path="/VoteFaucet" element={<VoteFaucet />} />
 
                 {/* Proposal List Main Page route */}
                 <Route path="/proposallist" element={<ProposalMain />} />
