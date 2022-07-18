@@ -6,13 +6,14 @@ export default function Home() {
 
     return (
         <React.Fragment>
-            <div className={"alert alert-success alert-dismissible fade show"} role="alert">
-                <div>
-                    <strong>Vote in any proposal now for an exclusive NFT! </strong>
+            <div className="container">
+                {/* Alert telling people about free NFT  */}
+                <div className={"alert alert-success alert-dismissible fade show"} role="alert">
+                    <div>
+                        <strong>Vote in any proposal now for an exclusive NFT! </strong>
+                    </div>
+                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            <div className="container mt-5">
                 <h1>Survey Question 1: </h1>
                 <h2>Out of everything that we have presented, which do you think is the most useful to your department? </h2>
                 <select className="form-select form-select-lg mb-3">

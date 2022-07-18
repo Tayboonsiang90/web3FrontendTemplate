@@ -1,3 +1,27 @@
 .debug {
     border: 1px solid red;
 }
+
+.font-gold {
+    color: #ff9900;
+}
+
+.font-white {
+    color: #f0f0f0;
+}
+
+.font-big {
+    font-family: "Tourney", cursive;
+    font-weight: 700;
+    font-weight: bold;
+}
+
+.font-small {
+    font-family: "Tourney", cursive;
+    font-weight: 900;
+    font-weight: bold;
+}
+
+.font-medium {
+    font-family: "Source Code Pro", monospace;
+}

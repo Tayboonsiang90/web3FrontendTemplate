@@ -4,7 +4,7 @@ import "./App.css";
 import EthFaucet from "./pages/EthFaucet";
 import VoteFaucet from "./pages/VoteFaucet";
 import Home from "./pages/Home";
-import ProposalMain from "./pages/ProposalMain";
+import Tokenomics from "./pages/Tokenomics";
 import { useGlobalContext } from "./contexts/globalProvider";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -158,120 +158,128 @@ function App() {
     return (
         <Router>
             {/* Navbar  */}
-            <nav className="navbar navbar-expand-lg bg-light">
+            <nav className="navbar navbar-expand-lg bg-dark mb-3">
                 <div className="container-fluid">
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
                         <ul className="navbar-nav">
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/">
-                                    Live Voting
+                            <li className="nav-item me-4 h2">
+                                <Link className="nav-link font-gold font-small" to="/">
+                                    Home
                                 </Link>
                             </li>
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/EthFaucet">
-                                    ETH Faucet
+                            <li className="nav-item me-4 h2">
+                                <Link className="nav-link font-gold font-small" to="/EthFaucet">
+                                    Claim ETH
                                 </Link>
                             </li>
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/VoteFaucet">
-                                    VOTE Faucet
+                            <li className="nav-item me-4 h2">
+                                <Link className="nav-link font-gold font-small" to="/VoteFaucet">
+                                    Claim VOTE
                                 </Link>
                             </li>
-                            <li className="nav-item h1 me-4">
-                                <Link className="nav-link" to="/proposallist">
-                                    NFT Claim
+                            <li className="nav-item me-4 h2">
+                                <Link className="nav-link font-gold font-small" to="/Tokenomics">
+                                    Tokenomics
                                 </Link>
                             </li>
                         </ul>
                         {currentAccountAddress && (
-                            <div>
-                                <div className="me-5">
-                                    Connected to{" "}
-                                    <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
-                                        {currentAccountAddress}
-                                    </a>
+                            <>
+                                <div className="font-white text-end font-medium">
+                                    <div>
+                                        Connected to{" "}
+                                        <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
+                                            {currentAccountAddress}
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <i class="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
+                                    </div>
+                                    <div>
+                                        <i class="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
+                                    </div>
                                 </div>
-                                <div> ETH Balance: {currentAccountEthBal}</div>
-                                <div> Vote Token Balance: {currentAccountVoteBal}</div>
                                 <button
                                     type="button"
-                                    className="btn btn-primary btn-lg"
+                                    className="btn btn-primary btn-lg font-medium"
                                     onClick={() => {
                                         setCurrentAccountAddress("");
                                     }}
                                 >
                                     Disconnect
                                 </button>
-                            </div>
+                            </>
                         )}
                         {!currentAccountAddress && (
-                            <button type="button" className="btn btn-primary btn-lg" onClick={connectWallet}>
+                            <button type="button" className="btn btn-primary btn-lg font-medium" onClick={connectWallet}>
                                 Connect Wallet
                             </button>
                         )}
                     </div>
                 </div>
             </nav>
-            {/* Dismissable alert about the state of the user's metamask */}
-            {!metamaskExistCheck && (
-                <div className={"alert alert-danger alert-dismissible fade show"} role="alert">
-                    <div>
-                        <strong>Metamask isn't installed in your browser. </strong> You can install it at{" "}
-                        <a href="https://metamask.io/download/" target="_blank" rel="noreferrer">
-                            https://metamask.io/download/
-                        </a>
-                        .
+            <div className="container">
+                {/* Dismissable alert about the state of the user's metamask */}
+                {!metamaskExistCheck && (
+                    <div className={"alert alert-danger alert-dismissible fade show"} role="alert">
+                        <div>
+                            <strong>Metamask isn't installed in your browser. </strong> You can install it at{" "}
+                            <a href="https://metamask.io/download/" target="_blank" rel="noreferrer">
+                                https://metamask.io/download/
+                            </a>
+                            .
+                        </div>
+                        <div>You can still continue but you cannot interact with any of the buttons.</div>
+                        <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                    <div>You can still continue but you cannot interact with any of the buttons.</div>
-                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            )}
-            {/* Dismissable alert switching to Rinkeby Network */}
-            {metamaskExistCheck && currentChainId != 4 && (
-                <div className={"alert alert-danger alert-dismissible fade show"} role="alert">
-                    <div>
-                        <strong>You are not on the Rinkeby Test Network. </strong>
-                        <button className="btn btn-primary" onClick={switchToRinkebyNetwork}>
-                            Switch to Rinkeby Network
-                        </button>
+                )}
+                {/* Dismissable alert switching to Rinkeby Network */}
+                {metamaskExistCheck && currentChainId != 4 && (
+                    <div className={"alert alert-danger alert-dismissible fade show"} role="alert">
+                        <div>
+                            <strong>You are not on the Rinkeby Test Network. </strong>
+                            <button className="btn btn-primary" onClick={switchToRinkebyNetwork}>
+                                Switch to Rinkeby Network
+                            </button>
+                        </div>
+                        <div>This app will not work properly if you are not on the right network. </div>
+                        <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                    <div>This app will not work properly if you are not on the right network. </div>
-                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            )}
-            {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
-            {currentChainId == 4 && metamaskExistCheck && !currentAccountEthBal && (
-                <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
-                    <div>
-                        <strong>You do not have enough ETH to make transactions. Get some ETH from the faucet! </strong>
-                        <button className="btn btn-primary">
-                            <Link className="nav-link" to="/EthFaucet">
-                                Rinkeby ETH Faucet
-                            </Link>
-                        </button>
+                )}
+                {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
+                {currentChainId == 4 && metamaskExistCheck && !currentAccountEthBal && (
+                    <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
+                        <div>
+                            <strong>You do not have enough ETH to make transactions. Get some ETH from the faucet! </strong>
+                            <button className="btn btn-primary">
+                                <Link className="nav-link" to="/EthFaucet">
+                                    Rinkeby ETH Faucet
+                                </Link>
+                            </button>
+                        </div>
+                        <div>You can still continue but you cannot interact with any of the buttons.</div>
+                        <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                    <div>You can still continue but you cannot interact with any of the buttons.</div>
-                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            )}
-            {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
-            {currentChainId == 4 && metamaskExistCheck && !currentAccountVoteBal && (
-                <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
-                    <div>
-                        <strong>You do not have enough VOTE to make any vote. Get 100 VOTE from the faucet! </strong>
-                        <button className="btn btn-primary">
-                            <Link className="nav-link" to="/VoteFaucet">
-                                VOTE Faucet
-                            </Link>
-                        </button>
+                )}
+                {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
+                {currentChainId == 4 && metamaskExistCheck && !currentAccountVoteBal && (
+                    <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
+                        <div>
+                            <strong>You do not have enough VOTE to make any vote. Get 100 VOTE from the faucet! </strong>
+                            <button className="btn btn-primary">
+                                <Link className="nav-link" to="/VoteFaucet">
+                                    VOTE Faucet
+                                </Link>
+                            </button>
+                        </div>
+                        <div>You will not be able to vote until you get some VOTE tokens. </div>
+                        <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
-                    <div>You will not be able to vote until you get some VOTE tokens. </div>
-                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            )}
+                )}
+            </div>
             <Routes>
                 {/* Home route */}
                 <Route path="/" element={<Home />} />
@@ -283,7 +291,7 @@ function App() {
                 <Route path="/VoteFaucet" element={<VoteFaucet />} />
 
                 {/* Proposal List Main Page route */}
-                <Route path="/proposallist" element={<ProposalMain />} />
+                <Route path="/Tokenomics" element={<Tokenomics />} />
             </Routes>
         </Router>
     );
