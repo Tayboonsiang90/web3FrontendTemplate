@@ -25,3 +25,7 @@
 .font-medium {
     font-family: "Source Code Pro", monospace;
 }
+
+.nav-link:hover {
+    color: #f0f0f0 !important;
+}

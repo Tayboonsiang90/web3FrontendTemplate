@@ -15,8 +15,8 @@ const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
 // Replace with address of Vote Token
 const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
-// Governer Contract
-const governerAddress = "0xe18B55eafa32De45cF5Fb2d4A55DC72B83d80175";
+// Governor Contract
+const governorAddress = "0xF28C12b150501f0538b6dbeFB6C4c92A49D1fB8D";
 
 // Standard sleep function
 function sleep(ms) {
@@ -180,6 +180,11 @@ function App() {
                                     Claim VOTE
                                 </Link>
                             </li>
+                            {/* <li className="nav-item me-4 h2">
+                                <Link className="nav-link font-gold font-small" to="/VoteFaucet">
+                                    Trade VOTE
+                                </Link>
+                            </li> */}
                             <li className="nav-item me-4 h2">
                                 <Link className="nav-link font-gold font-small" to="/Tokenomics">
                                     Tokenomics
@@ -196,10 +201,10 @@ function App() {
                                         </a>
                                     </div>
                                     <div>
-                                        <i class="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
+                                        <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
                                     </div>
                                     <div>
-                                        <i class="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
+                                        <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
                                     </div>
                                 </div>
                                 <button

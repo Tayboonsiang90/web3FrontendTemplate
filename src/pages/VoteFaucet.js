@@ -76,14 +76,6 @@ export default function VoteFaucet() {
             <div className="container mt-5">
                 <h1>Have no voting power? Get 100 free VOTE tokens here!</h1>
                 <h3>VOTE token represents your voting power. They can be traded, transferred, delegated. </h3>
-                <div className="row">
-                    <div className="col borderDark">
-                        <h1></h1>
-                    </div>
-                    <div className="col borderDark">
-                        <h1></h1>
-                    </div>
-                </div>
                 {currentAccountVoteBal == 0 && (
                     <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
                         {faucetFlag ? "Please Wait..." : "Get 100 VOTE Tokens"}
@@ -102,6 +94,7 @@ export default function VoteFaucet() {
                         </a>
                     </div>
                 )}
+                <h1 class>Want more voting power? Buy more VOTE tokens with your Rinkeby ETH. </h1>
             </div>
         </React.Fragment>
     );
