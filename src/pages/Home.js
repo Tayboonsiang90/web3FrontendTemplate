@@ -76,7 +76,7 @@ export default function Home() {
                         let voterStruct = {};
                         voterStruct.voterAddress = proposalDetail[5][j];
                         voterStruct.voterPower = parseInt(proposalDetailVoterPower[j]) / 10 ** 18;
-                        voterStruct.voterChoice = proposalDetailVoterChoice[j];
+                        voterStruct.voterChoice = parseInt(proposalDetailVoterChoice[j]);
 
                         proposalObjectConstruct.voterDetailsArray.push(voterStruct);
                     }
@@ -96,7 +96,7 @@ export default function Home() {
         for (let proposal of proposalList) {
             console.log(proposal);
             let accordionItem = (
-                <div className="accordion-item" key={count}>
+                <div className="accordion-item mb-2" key={count}>
                     <h2 className="accordion-header" id="headingOne">
                         <button className="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
                             #{count}: {proposal.title}
@@ -130,31 +130,27 @@ export default function Home() {
                                     <table className="table border mt-5">
                                         <thead>
                                             <tr>
-                                                <th>Address</th>
+                                                <th>Address Voted</th>
                                                 <th>Voting Power</th>
                                                 <th>Choice</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {proposal.optionStringArray.map((item) => {
+                                            {proposal.voterDetailsArray.map((item) => {
                                                 return (
-                                                    <tr key={item.optionName}>
-                                                        <td>{item.optionName}</td>
-                                                        <td>{item.optionVoteCount}</td>
-                                                        <td>{item.optionVotePrecentage}</td>
+                                                    <tr key={item.voterAddress}>
+                                                        <td>{item.voterAddress}</td>
+                                                        <td>{item.voterPower}</td>
+                                                        <td>{proposal.optionStringArray[item.voterChoice].optionName}</td>
                                                     </tr>
                                                 );
                                             })}
-                                            <tr>
-                                                <td>Total Votes</td>
-                                                <td>{proposal.totalVotes}</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div className="col-1"></div>
                                 <div className="col-3">
-                                    <table className="table">
+                                    <table className="table border">
                                         <thead>
                                             <tr>
                                                 <th>Option</th>
