@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../contexts/globalProvider";
 import governerContractABI from "../utils/Governor.json";
 import { ethers } from "ethers";
-import { solidityKeccak256 } from "ethers/lib/utils";
 
 // // Environment Variables
 // Governor Contract
@@ -11,7 +10,6 @@ const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
 export default function Home() {
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
 
-    const [numOfProposal, setNumOfProposal] = useState(0);
     const [proposalList, setProposalList] = useState([]);
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
@@ -31,10 +29,9 @@ export default function Home() {
 
                 // Check how many proposals are there live currently
                 let numOfProposal = await governorContract.currentProposalId();
-                setNumOfProposal(parseInt(numOfProposal));
                 console.log("The current number of proposals is", parseInt(numOfProposal));
 
-                let tempState = [];
+                let tempState = new Array(numOfProposal);
 
                 // Retrieve the state of all the proposals from the blockchain
                 for (let i = 0; i < numOfProposal; i++) {
@@ -81,7 +78,7 @@ export default function Home() {
                         proposalObjectConstruct.voterDetailsArray.push(voterStruct);
                     }
                     console.log(proposalObjectConstruct);
-                    tempState.push(proposalObjectConstruct);
+                    tempState[numOfProposal - i - 1] = proposalObjectConstruct;
                 }
                 setProposalList(tempState);
             }
@@ -90,42 +87,44 @@ export default function Home() {
         }
     };
 
+    const voteInGovernor = () => {};
+
     const displayProposal = () => {
         let renderResult = [];
-        let count = 1;
+        let count = proposalList.length;
         for (let proposal of proposalList) {
             console.log(proposal);
             let accordionItem = (
                 <div className="accordion-item mb-2" key={count}>
-                    <h2 className="accordion-header" id="headingOne">
-                        <button className="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                            #{count}: {proposal.title}
+                    <h2 className="accordion-header" id={"headingOne" + count}>
+                        <button className="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target={"#collapseOne" + count}>
+                            Proposal #{count}: {proposal.title}
                         </button>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div id={"collapseOne" + count} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
                             <div className="row">
-                                <div className="col-12 h1 text-center mb-4">Title: {proposal.title}</div>
+                                <div className="col-12 h1 text-center mb-4 font-big">{proposal.title}</div>
                             </div>
                             <div className="row">
-                                <div className="col-8">
+                                <div className="col-9">
                                     <div>
-                                        <span className="fw-bold">Description:</span> {proposal.description}
+                                        <span className="fw-bold font-medium">Description:</span> {proposal.description}
                                     </div>
                                     <div>
-                                        <span className="fw-bold">Proposer:</span>{" "}
+                                        <span className="fw-bold font-medium">Proposer:</span>{" "}
                                         <a href={"https://etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
                                             {proposal.author}
                                         </a>
                                     </div>
                                     <div>
-                                        <span className="fw-bold">Block Height:</span> {proposal.createdAtBlock}
+                                        <span className="fw-bold font-medium">Block Height:</span> {proposal.createdAtBlock}
                                     </div>
                                     <div>
-                                        <span className="fw-bold">Date Time Created:</span>
+                                        <span className="fw-bold font-medium">Date Time Created:</span>
                                     </div>
                                     <div>
-                                        <span className="fw-bold">Date Time Expiring:</span>
+                                        <span className="fw-bold font-medium">Date Time Expiring:</span>
                                     </div>
                                     <table className="table border mt-5">
                                         <thead>
@@ -148,7 +147,6 @@ export default function Home() {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="col-1"></div>
                                 <div className="col-3">
                                     <table className="table border">
                                         <thead>
@@ -174,6 +172,7 @@ export default function Home() {
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <img src="https://lh3.googleusercontent.com/g0Jw-I6-gH2DVCpnl3u8QKZVT_meR9lcJlpyeSZ-MyvwLnyEZvgyrY5frldA8HCv55s=w280" alt="new" />
                                     <select className="form-select">
                                         <option selected>Please select an option</option>
                                         {proposal.optionStringArray.map((item) => {
@@ -181,7 +180,7 @@ export default function Home() {
                                         })}
                                     </select>
                                     <div className="mt-2">
-                                        <button type="button" className="btn btn-primary btn-lg font-medium">
+                                        <button type="button" className="btn btn-primary btn-lg font-medium" onClick={voteInGovernor}>
                                             Vote
                                         </button>
                                         <button type="button" className="ms-2 btn btn-success btn-lg font-medium disabled">
@@ -196,7 +195,7 @@ export default function Home() {
             );
             renderResult.push(accordionItem);
             // react key
-            count++;
+            count--;
         }
         return renderResult;
     };
