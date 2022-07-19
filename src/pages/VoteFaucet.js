@@ -99,7 +99,7 @@ export default function VoteFaucet() {
                 )}
                 <div className="h1 mt-5">
                     Want more voting power?{" "}
-                    <a href="https://rinkeby.etherscan.io/token/0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7#balances" target="_blank" rel="noreferrer">
+                    <a href="https://app.uniswap.org/#/swap?chain=rinkeby&inputCurrency=ETH&outputCurrency=0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7" target="_blank" rel="noreferrer">
                         Buy more VOTE tokens with your Rinkeby ETH.
                     </a>
                 </div>

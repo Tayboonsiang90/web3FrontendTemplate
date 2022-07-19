@@ -142,7 +142,7 @@ export default function Home() {
                         </button>
                     </h2>
                     <div id={"collapseOne" + count} className={"accordion-collapse collapse "} data-bs-parent="#accordionExample">
-                        <div className="accordion-body">
+                        <div className="accordion-body bg-light">
                             <div className="row">
                                 <div className="col-12 h1 text-center mb-4 font-big">{proposal.title}</div>
                             </div>
@@ -158,15 +158,15 @@ export default function Home() {
                                         </a>
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Block Height:</span> {proposal.createdAtBlock}
+                                        <span className="fw-bold font-medium">Block Height Created:</span> {proposal.createdAtBlock}
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <span className="fw-bold font-medium">Date Time Created:</span>
                                     </div>
                                     <div>
                                         <span className="fw-bold font-medium">Date Time Expiring:</span>
-                                    </div>
-                                    <table className="table border mt-5">
+                                    </div> */}
+                                    <table className="table border mt-5 border-dark">
                                         <thead>
                                             <tr>
                                                 <th>Address Voted</th>
@@ -188,7 +188,7 @@ export default function Home() {
                                     </table>
                                 </div>
                                 <div className="col-3">
-                                    <table className="table border">
+                                    <table className="table border border-dark">
                                         <thead>
                                             <tr>
                                                 <th>Option</th>
@@ -207,13 +207,13 @@ export default function Home() {
                                                 );
                                             })}
                                             <tr>
-                                                <td>Total Votes</td>
-                                                <td>{proposal.totalVotes}</td>
+                                                <td className="fw-bold">Total Votes</td>
+                                                <td className="fw-bold">{proposal.totalVotes}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <img src="https://lh3.googleusercontent.com/g0Jw-I6-gH2DVCpnl3u8QKZVT_meR9lcJlpyeSZ-MyvwLnyEZvgyrY5frldA8HCv55s=w280" alt="new" />
-                                    <select className="form-select" onChange={updateState} value={proposalOptionSelect[count - 1]} data-tag={count - 1}>
+                                    {/* <img src="https://lh3.googleusercontent.com/g0Jw-I6-gH2DVCpnl3u8QKZVT_meR9lcJlpyeSZ-MyvwLnyEZvgyrY5frldA8HCv55s=w280" alt="new" /> */}
+                                    <select className="form-select border border-danger mt-4" onChange={updateState} value={proposalOptionSelect[count - 1]} data-tag={count - 1}>
                                         <option>Please select an option</option>
                                         {proposal.optionStringArray.map((item, i) => {
                                             return (
