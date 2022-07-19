@@ -4,6 +4,8 @@ import governerContractABI from "../utils/Governor.json";
 import { ethers } from "ethers";
 
 // // Environment Variables
+// Replace with your API Key
+const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 // Governor Contract
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
 
@@ -11,6 +13,8 @@ export default function Home() {
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
 
     const [proposalList, setProposalList] = useState([]);
+    const [proposalOptionSelect, setProposalOptionSelect] = useState([]);
+
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
         extractDataFromGovernorContract();
@@ -18,76 +22,66 @@ export default function Home() {
 
     const extractDataFromGovernorContract = async () => {
         try {
-            const { ethereum } = window;
+            console.log("Extracting data from the Governor SC... ");
+            // Standard technique to load a contract
+            const provider = new ethers.providers.AlchemyProvider("rinkeby", apiKey);
+            const governorContract = new ethers.Contract(governorContractAddress, governerContractABI, provider);
 
-            if (ethereum) {
-                console.log("Extracting data from the Governor SC... ");
-                // Standard technique to load a contract
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                const governorContract = new ethers.Contract(governorContractAddress, governerContractABI, signer);
+            // Check how many proposals are there live currently
+            let numOfProposal = await governorContract.currentProposalId();
+            console.log("The current number of proposals is", parseInt(numOfProposal));
+            setProposalOptionSelect(new Array(numOfProposal));
 
-                // Check how many proposals are there live currently
-                let numOfProposal = await governorContract.currentProposalId();
-                console.log("The current number of proposals is", parseInt(numOfProposal));
+            let tempState = new Array(numOfProposal);
 
-                let tempState = new Array(numOfProposal);
-
-                // Retrieve the state of all the proposals from the blockchain
-                for (let i = 0; i < numOfProposal; i++) {
-                    let proposalDetailFull = await governorContract.viewProposalDetails(i);
-                    console.log("Downloaded a proposal", proposalDetailFull);
-                    let proposalDetail = proposalDetailFull[0];
-                    let proposalDetailOptionString = proposalDetailFull[1];
-                    let proposalDetailOptionValue = proposalDetailFull[2];
-                    let proposalDetailVoterChoice = proposalDetailFull[3];
-                    let proposalDetailVoterPower = proposalDetailFull[4];
-                    // address author; // Address of Proposer
-                    // string title; // Title of Proposal
-                    // string description; // Description of Proposal
-                    // uint256 createdAt; // Block Height Created
-                    // uint256 numOfOptions; // Number of Voting Options
-                    // address[] voters; // An array of voters
-                    // uint256 totalVotes; // Total Voted
-                    let proposalObjectConstruct = {};
-                    proposalObjectConstruct.author = proposalDetail[0];
-                    proposalObjectConstruct.title = proposalDetail[1];
-                    proposalObjectConstruct.description = proposalDetail[2];
-                    proposalObjectConstruct.createdAtBlock = parseInt(proposalDetail[3]);
-                    // proposalObjectConstruct.createdAtTime = (await provider.getBlock(proposalObjectConstruct.createdAtBlock)).timestamp;
-                    proposalObjectConstruct.numOfOptions = parseInt(proposalDetail[4]);
-                    proposalObjectConstruct.optionStringArray = [];
-                    proposalObjectConstruct.totalVotes = parseInt(proposalDetail[6]) / 10 ** 18;
-                    // Iterate through the number of options and find the names
-                    for (let j = 0; j < proposalObjectConstruct.numOfOptions; j++) {
-                        let optionStruct = {};
-                        optionStruct.optionName = proposalDetailOptionString[j];
-                        optionStruct.optionVoteCount = parseInt(proposalDetailOptionValue[j]) / 10 ** 18;
-                        optionStruct.optionVotePrecentage = ((optionStruct.optionVoteCount * 100) / proposalObjectConstruct.totalVotes).toFixed(0);
-
-                        proposalObjectConstruct.optionStringArray.push(optionStruct);
-                    }
-                    proposalObjectConstruct.numOfVoters = proposalDetail[5].length;
-                    proposalObjectConstruct.voterDetailsArray = [];
-                    for (let j = 0; j < proposalObjectConstruct.numOfVoters; j++) {
-                        let voterStruct = {};
-                        voterStruct.voterAddress = proposalDetail[5][j];
-                        voterStruct.voterPower = parseInt(proposalDetailVoterPower[j]) / 10 ** 18;
-                        voterStruct.voterChoice = parseInt(proposalDetailVoterChoice[j]);
-
-                        proposalObjectConstruct.voterDetailsArray.push(voterStruct);
-                    }
-                    console.log(proposalObjectConstruct);
-                    tempState[numOfProposal - i - 1] = proposalObjectConstruct;
+            // Retrieve the state of all the proposals from the blockchain
+            for (let i = 0; i < numOfProposal; i++) {
+                let proposalDetailFull = await governorContract.viewProposalDetails(i);
+                console.log("Downloaded a proposal", proposalDetailFull);
+                let proposalDetail = proposalDetailFull[0];
+                let proposalDetailOptionString = proposalDetailFull[1];
+                let proposalDetailOptionValue = proposalDetailFull[2];
+                let proposalDetailVoterChoice = proposalDetailFull[3];
+                let proposalDetailVoterPower = proposalDetailFull[4];
+                let proposalObjectConstruct = {};
+                proposalObjectConstruct.author = proposalDetail[0];
+                proposalObjectConstruct.title = proposalDetail[1];
+                proposalObjectConstruct.description = proposalDetail[2];
+                proposalObjectConstruct.createdAtBlock = parseInt(proposalDetail[3]);
+                // proposalObjectConstruct.createdAtTime = (await provider.getBlock(proposalObjectConstruct.createdAtBlock)).timestamp;
+                proposalObjectConstruct.numOfOptions = parseInt(proposalDetail[4]);
+                proposalObjectConstruct.optionStringArray = [];
+                proposalObjectConstruct.totalVotes = parseInt(proposalDetail[6]) / 10 ** 18;
+                // Iterate through the number of options and find the names
+                for (let j = 0; j < proposalObjectConstruct.numOfOptions; j++) {
+                    let optionStruct = {};
+                    optionStruct.optionName = proposalDetailOptionString[j];
+                    optionStruct.optionVoteCount = parseInt(proposalDetailOptionValue[j]) / 10 ** 18;
+                    optionStruct.optionVotePrecentage = proposalObjectConstruct.totalVotes ? ((optionStruct.optionVoteCount * 100) / proposalObjectConstruct.totalVotes).toFixed(0) : 0;
+                    proposalObjectConstruct.optionStringArray.push(optionStruct);
                 }
-                setProposalList(tempState);
+                proposalObjectConstruct.numOfVoters = proposalDetail[5].length;
+                proposalObjectConstruct.voterDetailsArray = [];
+                for (let j = 0; j < proposalObjectConstruct.numOfVoters; j++) {
+                    let voterStruct = {};
+                    voterStruct.voterAddress = proposalDetail[5][j];
+                    voterStruct.voterPower = parseInt(proposalDetailVoterPower[j]) / 10 ** 18;
+                    voterStruct.voterChoice = parseInt(proposalDetailVoterChoice[j]);
+
+                    proposalObjectConstruct.voterDetailsArray.push(voterStruct);
+                }
+                console.log(proposalObjectConstruct);
+                tempState[numOfProposal - i - 1] = proposalObjectConstruct;
             }
+            setProposalList(tempState);
         } catch (e) {
             console.log(e);
         }
     };
 
     const voteInGovernor = () => {};
+
+    const updateState = (event) => {};
 
     const displayProposal = () => {
         let renderResult = [];
@@ -173,7 +167,7 @@ export default function Home() {
                                         </tbody>
                                     </table>
                                     <img src="https://lh3.googleusercontent.com/g0Jw-I6-gH2DVCpnl3u8QKZVT_meR9lcJlpyeSZ-MyvwLnyEZvgyrY5frldA8HCv55s=w280" alt="new" />
-                                    <select className="form-select">
+                                    <select className="form-select" onChange={updateState}>
                                         <option selected>Please select an option</option>
                                         {proposal.optionStringArray.map((item) => {
                                             return <option value="1">{item.optionName}</option>;
