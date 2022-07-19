@@ -16,7 +16,7 @@ const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
 // Replace with address of Vote Token
 const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
 // Governor Contract
-const governorAddress = "0xF28C12b150501f0538b6dbeFB6C4c92A49D1fB8D";
+const governorAddress = "0x45f6347d246ae443bec9834845e005382dbb8037";
 
 // Standard sleep function
 function sleep(ms) {

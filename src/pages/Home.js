@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../contexts/globalProvider";
 import governerContractABI from "../utils/Governor.json";
 import { ethers } from "ethers";
+import { solidityKeccak256 } from "ethers/lib/utils";
 
 // // Environment Variables
 // Governor Contract
-const governorContractAddress = "0xF28C12b150501f0538b6dbeFB6C4c92A49D1fB8D";
+const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
 
 export default function Home() {
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
@@ -33,9 +34,17 @@ export default function Home() {
                 setNumOfProposal(parseInt(numOfProposal));
                 console.log("The current number of proposals is", parseInt(numOfProposal));
 
+                let tempState = [];
+
                 // Retrieve the state of all the proposals from the blockchain
                 for (let i = 0; i < numOfProposal; i++) {
-                    let proposalDetail = await governorContract.viewProposalDetails(i);
+                    let proposalDetailFull = await governorContract.viewProposalDetails(i);
+                    console.log("Downloaded a proposal", proposalDetailFull);
+                    let proposalDetail = proposalDetailFull[0];
+                    let proposalDetailOptionString = proposalDetailFull[1];
+                    let proposalDetailOptionValue = proposalDetailFull[2];
+                    let proposalDetailVoterChoice = proposalDetailFull[3];
+                    let proposalDetailVoterPower = proposalDetailFull[4];
                     // address author; // Address of Proposer
                     // string title; // Title of Proposal
                     // string description; // Description of Proposal
@@ -47,14 +56,17 @@ export default function Home() {
                     proposalObjectConstruct.author = proposalDetail[0];
                     proposalObjectConstruct.title = proposalDetail[1];
                     proposalObjectConstruct.description = proposalDetail[2];
-                    proposalObjectConstruct.createdAt = parseInt(proposalDetail[3]);
+                    proposalObjectConstruct.createdAtBlock = parseInt(proposalDetail[3]);
+                    // proposalObjectConstruct.createdAtTime = (await provider.getBlock(proposalObjectConstruct.createdAtBlock)).timestamp;
                     proposalObjectConstruct.numOfOptions = parseInt(proposalDetail[4]);
                     proposalObjectConstruct.optionStringArray = [];
+                    proposalObjectConstruct.totalVotes = parseInt(proposalDetail[6]) / 10 ** 18;
                     // Iterate through the number of options and find the names
                     for (let j = 0; j < proposalObjectConstruct.numOfOptions; j++) {
                         let optionStruct = {};
-                        optionStruct.optionName = await governorContract.proposalOptions(i, j);
-                        optionStruct.optionVoteCount = parseInt(await governorContract.proposalCount(i, j)) / 10 ** 18;
+                        optionStruct.optionName = proposalDetailOptionString[j];
+                        optionStruct.optionVoteCount = parseInt(proposalDetailOptionValue[j]) / 10 ** 18;
+                        optionStruct.optionVotePrecentage = ((optionStruct.optionVoteCount * 100) / proposalObjectConstruct.totalVotes).toFixed(0);
 
                         proposalObjectConstruct.optionStringArray.push(optionStruct);
                     }
@@ -63,19 +75,19 @@ export default function Home() {
                     for (let j = 0; j < proposalObjectConstruct.numOfVoters; j++) {
                         let voterStruct = {};
                         voterStruct.voterAddress = proposalDetail[5][j];
-                        voterStruct.voterPower = parseInt(await governorContract.proposalPower(i, voterStruct.voterAddress)) / 10 ** 18;
-                        // voterStruct.voterChoice = await governorContract.proposalAddressVote(i, voterStruct.voterAddress);
+                        voterStruct.voterPower = parseInt(proposalDetailVoterPower[j]) / 10 ** 18;
+                        voterStruct.voterChoice = proposalDetailVoterChoice[j];
 
                         proposalObjectConstruct.voterDetailsArray.push(voterStruct);
                     }
-                    proposalObjectConstruct.totalVotes = parseInt(proposalDetail[6]) / 10 ** 18;
-
-                    let tempState = proposalList;
-                    tempState[i] = proposalObjectConstruct;
-                    setProposalList(tempState);
+                    console.log(proposalObjectConstruct);
+                    tempState.push(proposalObjectConstruct);
                 }
+                setProposalList(tempState);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const displayProposal = () => {
@@ -84,18 +96,104 @@ export default function Home() {
         for (let proposal of proposalList) {
             console.log(proposal);
             let accordionItem = (
-                <div class="accordion-item" key={count}>
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                <div className="accordion-item" key={count}>
+                    <h2 className="accordion-header" id="headingOne">
+                        <button className="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
                             #{count}: {proposal.title}
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <div>Description: {proposal.description}</div>
-                            <div>Proposer: {proposal.author}</div>
-                            <div>Block Height: {proposal.createdAt}</div>
-                            <div></div>
+                    <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div className="accordion-body">
+                            <div className="row">
+                                <div className="col-12 h1 text-center mb-4">Title: {proposal.title}</div>
+                            </div>
+                            <div className="row">
+                                <div className="col-8">
+                                    <div>
+                                        <span className="fw-bold">Description:</span> {proposal.description}
+                                    </div>
+                                    <div>
+                                        <span className="fw-bold">Proposer:</span>{" "}
+                                        <a href={"https://etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
+                                            {proposal.author}
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <span className="fw-bold">Block Height:</span> {proposal.createdAtBlock}
+                                    </div>
+                                    <div>
+                                        <span className="fw-bold">Date Time Created:</span>
+                                    </div>
+                                    <div>
+                                        <span className="fw-bold">Date Time Expiring:</span>
+                                    </div>
+                                    <table className="table border mt-5">
+                                        <thead>
+                                            <tr>
+                                                <th>Address</th>
+                                                <th>Voting Power</th>
+                                                <th>Choice</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {proposal.optionStringArray.map((item) => {
+                                                return (
+                                                    <tr key={item.optionName}>
+                                                        <td>{item.optionName}</td>
+                                                        <td>{item.optionVoteCount}</td>
+                                                        <td>{item.optionVotePrecentage}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            <tr>
+                                                <td>Total Votes</td>
+                                                <td>{proposal.totalVotes}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="col-1"></div>
+                                <div className="col-3">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Option</th>
+                                                <th>Votes</th>
+                                                <th>%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {proposal.optionStringArray.map((item) => {
+                                                return (
+                                                    <tr key={item.optionName}>
+                                                        <td>{item.optionName}</td>
+                                                        <td>{item.optionVoteCount}</td>
+                                                        <td>{item.optionVotePrecentage}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            <tr>
+                                                <td>Total Votes</td>
+                                                <td>{proposal.totalVotes}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <select className="form-select">
+                                        <option selected>Please select an option</option>
+                                        {proposal.optionStringArray.map((item) => {
+                                            return <option value="1">{item.optionName}</option>;
+                                        })}
+                                    </select>
+                                    <div className="mt-2">
+                                        <button type="button" className="btn btn-primary btn-lg font-medium">
+                                            Vote
+                                        </button>
+                                        <button type="button" className="ms-2 btn btn-success btn-lg font-medium disabled">
+                                            Collect NFT!
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,9 +215,15 @@ export default function Home() {
                     </div>
                     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <h1>Proposal List</h1>
+                <h1 className="mt-5">
+                    Proposal List
+                    <button type="button" className="ms-5 btn btn-primary btn-lg font-medium">
+                        Create a new Proposal
+                    </button>
+                </h1>
+
                 {/* Accordion containing a list of proposals */}
-                <div class="accordion" id="accordionExample">
+                <div className="accordion mt-5" id="accordionExample">
                     {displayProposal()}
                 </div>
             </div>
