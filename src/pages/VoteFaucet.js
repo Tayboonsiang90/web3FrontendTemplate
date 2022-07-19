@@ -66,9 +66,12 @@ export default function VoteFaucet() {
 
                 setFaucetFlag(false);
             } else {
-                console.log("Ethereum object doesn't exist!");
+                alert("Metamask is not installed! Please install it. ");
+                setFaucetFlag(false);
             }
-        } catch (e) {}
+        } catch (e) {
+            alert(e["message"]);
+        }
     };
 
     return (

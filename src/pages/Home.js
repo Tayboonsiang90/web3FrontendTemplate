@@ -8,16 +8,26 @@ import { ethers } from "ethers";
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 // Governor Contract
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
+// Refresh Timing
+const MINUTE_MS = 600000;
 
 export default function Home() {
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
 
     const [proposalList, setProposalList] = useState([]);
     const [proposalOptionSelect, setProposalOptionSelect] = useState([]);
+    const [voteFlag, setVoteFlag] = useState(false);
+    const [txId, setTxId] = useState("");
 
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
         extractDataFromGovernorContract();
+        const interval = setInterval(() => {
+            console.log("Refreshing data...");
+            extractDataFromGovernorContract();
+        }, MINUTE_MS);
+
+        return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
     }, []);
 
     const extractDataFromGovernorContract = async () => {
@@ -30,7 +40,7 @@ export default function Home() {
             // Check how many proposals are there live currently
             let numOfProposal = await governorContract.currentProposalId();
             console.log("The current number of proposals is", parseInt(numOfProposal));
-            setProposalOptionSelect(new Array(numOfProposal));
+            setProposalOptionSelect(new Array(parseInt(numOfProposal)));
 
             let tempState = new Array(numOfProposal);
 
@@ -70,7 +80,6 @@ export default function Home() {
 
                     proposalObjectConstruct.voterDetailsArray.push(voterStruct);
                 }
-                console.log(proposalObjectConstruct);
                 tempState[numOfProposal - i - 1] = proposalObjectConstruct;
             }
             setProposalList(tempState);
@@ -79,15 +88,50 @@ export default function Home() {
         }
     };
 
-    const voteInGovernor = () => {};
+    const voteInGovernor = async (e) => {
+        try {
+            setVoteFlag(true);
+            let proposalId = Number(e.target.getAttribute("data-tag"));
+            let optionChoice = proposalOptionSelect[proposalId];
+            console.log(`Submitting Option: ${optionChoice}, Proposal:${proposalId}. `);
 
-    const updateState = (event) => {};
+            const { ethereum } = window;
+            if (ethereum) {
+                // Standard metamask setup functions
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const governorContract = new ethers.Contract(governorContractAddress, governerContractABI, signer);
+
+                let claimOwnTxn = await governorContract.voteInProposal(proposalId, optionChoice);
+                console.log(claimOwnTxn.hash);
+                setTxId(claimOwnTxn.hash);
+
+                setVoteFlag(false);
+            } else {
+                alert("Metamask is not installed! Please install it. ");
+            }
+
+            setVoteFlag(false);
+        } catch (e) {
+            alert(e["message"]);
+            setVoteFlag(false);
+        }
+    };
+
+    // Updating the state of the select boxes
+    const updateState = (e) => {
+        let proposalId = Number(e.target.getAttribute("data-tag"));
+        let optionChoice = Number(e.target.value);
+        console.log(`The option ${optionChoice + 1} has been selected for Proposal ${proposalId + 1}. `);
+        let tempState = proposalOptionSelect;
+        tempState[proposalId] = optionChoice;
+        setProposalOptionSelect(tempState);
+    };
 
     const displayProposal = () => {
         let renderResult = [];
         let count = proposalList.length;
         for (let proposal of proposalList) {
-            console.log(proposal);
             let accordionItem = (
                 <div className="accordion-item mb-2" key={count}>
                     <h2 className="accordion-header" id={"headingOne" + count}>
@@ -167,15 +211,19 @@ export default function Home() {
                                         </tbody>
                                     </table>
                                     <img src="https://lh3.googleusercontent.com/g0Jw-I6-gH2DVCpnl3u8QKZVT_meR9lcJlpyeSZ-MyvwLnyEZvgyrY5frldA8HCv55s=w280" alt="new" />
-                                    <select className="form-select" onChange={updateState}>
-                                        <option selected>Please select an option</option>
-                                        {proposal.optionStringArray.map((item) => {
-                                            return <option value="1">{item.optionName}</option>;
+                                    <select className="form-select" onChange={updateState} value={proposalOptionSelect[count - 1]} data-tag={count - 1}>
+                                        <option>Please select an option</option>
+                                        {proposal.optionStringArray.map((item, i) => {
+                                            return (
+                                                <option key={i} value={i}>
+                                                    {item.optionName}
+                                                </option>
+                                            );
                                         })}
                                     </select>
                                     <div className="mt-2">
-                                        <button type="button" className="btn btn-primary btn-lg font-medium" onClick={voteInGovernor}>
-                                            Vote
+                                        <button type="button" className="btn btn-primary btn-lg font-medium" data-tag={count - 1} onClick={voteInGovernor}>
+                                            {voteFlag ? "Please Wait..." : "Vote"}
                                         </button>
                                         <button type="button" className="ms-2 btn btn-success btn-lg font-medium disabled">
                                             Collect NFT!
