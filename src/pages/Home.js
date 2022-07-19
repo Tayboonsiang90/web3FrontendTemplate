@@ -9,7 +9,7 @@ const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 // Governor Contract
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
 // Refresh Timing
-const MINUTE_MS = 600000;
+const MINUTE_MS = 60000;
 
 export default function Home() {
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
@@ -106,6 +106,8 @@ export default function Home() {
                 console.log(claimOwnTxn.hash);
                 setTxId(claimOwnTxn.hash);
 
+                extractDataFromGovernorContract();
+
                 setVoteFlag(false);
             } else {
                 alert("Metamask is not installed! Please install it. ");
@@ -139,7 +141,7 @@ export default function Home() {
                             Proposal #{count}: {proposal.title}
                         </button>
                     </h2>
-                    <div id={"collapseOne" + count} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div id={"collapseOne" + count} className={"accordion-collapse collapse "} data-bs-parent="#accordionExample">
                         <div className="accordion-body">
                             <div className="row">
                                 <div className="col-12 h1 text-center mb-4 font-big">{proposal.title}</div>
@@ -254,14 +256,62 @@ export default function Home() {
                 </div>
                 <h1 className="mt-5">
                     Proposal List
-                    <button type="button" className="ms-5 btn btn-primary btn-lg font-medium">
+                    <button type="button" className="ms-5 btn btn-success btn-lg font-medium" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Create a new Proposal
                     </button>
                 </h1>
 
                 {/* Accordion containing a list of proposals */}
+                <div className={proposalList.length ? "d-none" : "h1 font-gold font-small"}>Loading...</div>
                 <div className="accordion mt-5" id="accordionExample">
                     {displayProposal()}
+                </div>
+            </div>
+            {/* Create Proposal Modal  */}
+            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">
+                                <div className="h3">Create your proposal here</div> <div>(Only whitelisted proposers)</div>
+                            </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div className="modal-body">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">
+                                    Proposal Title
+                                </label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Title of my proposal"></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">
+                                    Description (Be very descriptive)
+                                </label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description of my proposal"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">
+                                    Options (As many options as you want)
+                                </label>
+                                <input class="form-control" id="exampleFormControlTextarea2" placeholder='Format as follow ["Option 1", "Option 2", "Option 3"]'></input>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">
+                                    Number of Options
+                                </label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="In the example above, 3"></input>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" className="btn btn-primary">
+                                Submit Proposal Onchain
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </React.Fragment>

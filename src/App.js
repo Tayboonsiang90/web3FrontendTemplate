@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Tokenomics from "./pages/Tokenomics";
 import { useGlobalContext } from "./contexts/globalProvider";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+import logo from "./media/logo.jpg";
 
 // // Environment Variables
 // Replace with your API Key
@@ -163,66 +164,75 @@ function App() {
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-                        <ul className="navbar-nav">
-                            <li className="nav-item me-4 h2">
+                    <div className="collapse navbar-collapse d-flex justify-content-between align-items-center" id="navbarNav">
+                        <ul className="navbar-nav d-flex align-items-center">
+                            <li className="nav-item pe-4">
+                                <img className="me-3" src={logo} alt="Logo" style={{ width: "20vh" }} />
+                            </li>
+                            <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/">
                                     Home
                                 </Link>
                             </li>
-                            <li className="nav-item me-4 h2">
+                            <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/EthFaucet">
                                     Claim ETH
                                 </Link>
                             </li>
-                            <li className="nav-item me-4 h2">
+                            <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/VoteFaucet">
                                     Claim VOTE
                                 </Link>
                             </li>
-                            {/* <li className="nav-item me-4 h2">
-                                <Link className="nav-link font-gold font-small" to="/VoteFaucet">
+                            <li className="nav-item pe-4 text-center h3">
+                                <a href="https://app.uniswap.org/#/swap?chain=rinkeby&inputCurrency=ETH&outputCurrency=0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7" className="font-gold font-small" target="_blank" rel="noreferrer">
                                     Trade VOTE
-                                </Link>
-                            </li> */}
-                            <li className="nav-item me-4 h2">
-                                <Link className="nav-link font-gold font-small" to="/Tokenomics">
-                                    Tokenomics
-                                </Link>
+                                </a>
                             </li>
+                            <li className="nav-item pe-4 text-center h3">
+                                <a href="https://rinkeby.etherscan.io/token/0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7#balances" className="font-gold font-small" target="_blank" rel="noreferrer">
+                                    Tokenomics
+                                </a>
+                            </li>
+                            {currentAccountAddress && (
+                                <>
+                                    <li className="nav-item pe-4">
+                                        <div className="font-white text-end font-medium">
+                                            <div>
+                                                Connected to{" "}
+                                                <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
+                                                    {currentAccountAddress}
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
+                                            </div>
+                                            <div>
+                                                <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="nav-item pe-4">
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary btn-lg font-medium"
+                                            onClick={() => {
+                                                setCurrentAccountAddress("");
+                                            }}
+                                        >
+                                            Disconnect
+                                        </button>
+                                    </li>
+                                </>
+                            )}
+                            {!currentAccountAddress && (
+                                <li className="nav-item pe-4">
+                                    <button type="button" className="btn btn-primary btn-lg font-medium" onClick={connectWallet}>
+                                        Connect Wallet
+                                    </button>
+                                </li>
+                            )}
                         </ul>
-                        {currentAccountAddress && (
-                            <>
-                                <div className="font-white text-end font-medium">
-                                    <div>
-                                        Connected to{" "}
-                                        <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
-                                            {currentAccountAddress}
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
-                                    </div>
-                                    <div>
-                                        <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
-                                    </div>
-                                </div>
-                                <button
-                                    type="button"
-                                    className="btn btn-primary btn-lg font-medium"
-                                    onClick={() => {
-                                        setCurrentAccountAddress("");
-                                    }}
-                                >
-                                    Disconnect
-                                </button>
-                            </>
-                        )}
-                        {!currentAccountAddress && (
-                            <button type="button" className="btn btn-primary btn-lg font-medium" onClick={connectWallet}>
-                                Connect Wallet
-                            </button>
-                        )}
                     </div>
                 </div>
             </nav>
@@ -294,9 +304,6 @@ function App() {
 
                 {/* VoteFaucet route */}
                 <Route path="/VoteFaucet" element={<VoteFaucet />} />
-
-                {/* Proposal List Main Page route */}
-                <Route path="/Tokenomics" element={<Tokenomics />} />
             </Routes>
         </Router>
     );

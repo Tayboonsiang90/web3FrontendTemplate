@@ -97,7 +97,12 @@ export default function VoteFaucet() {
                         </a>
                     </div>
                 )}
-                <h1 class>Want more voting power? Buy more VOTE tokens with your Rinkeby ETH. </h1>
+                <div className="h1 mt-5">
+                    Want more voting power?{" "}
+                    <a href="https://rinkeby.etherscan.io/token/0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7#balances" target="_blank" rel="noreferrer">
+                        Buy more VOTE tokens with your Rinkeby ETH.
+                    </a>
+                </div>
             </div>
         </React.Fragment>
     );
