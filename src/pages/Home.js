@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../contexts/globalProvider";
 import governerContractABI from "../utils/Governor.json";
+import minterContractABI from "../utils/NFTMinter.json";
 import { ethers } from "ethers";
 
 // // Environment Variables
@@ -8,6 +9,8 @@ import { ethers } from "ethers";
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 // Governor Contract
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
+// NFT Minter Contract Address
+const nftMinterContractAddress = "0x3F14CC30ED2f2c7f35f4172aEa4fb98A3ab52D1A";
 // Refresh Timing
 const MINUTE_MS = 60000;
 
@@ -17,7 +20,10 @@ export default function Home() {
     const [proposalList, setProposalList] = useState([]);
     const [proposalOptionSelect, setProposalOptionSelect] = useState([]);
     const [voteFlag, setVoteFlag] = useState(false);
-    const [txId, setTxId] = useState("");
+    const [voteTxId, setVoteTxId] = useState("");
+    const [claimFlag, setClaimFlag] = useState(false);
+    const [claimTxId, setClaimTxId] = useState("");
+
 
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
@@ -61,12 +67,12 @@ export default function Home() {
                 // proposalObjectConstruct.createdAtTime = (await provider.getBlock(proposalObjectConstruct.createdAtBlock)).timestamp;
                 proposalObjectConstruct.numOfOptions = parseInt(proposalDetail[4]);
                 proposalObjectConstruct.optionStringArray = [];
-                proposalObjectConstruct.totalVotes = parseInt(proposalDetail[6]) / 10 ** 18;
+                proposalObjectConstruct.totalVotes = (parseInt(proposalDetail[6]) / 10 ** 18).toFixed(2);
                 // Iterate through the number of options and find the names
                 for (let j = 0; j < proposalObjectConstruct.numOfOptions; j++) {
                     let optionStruct = {};
                     optionStruct.optionName = proposalDetailOptionString[j];
-                    optionStruct.optionVoteCount = parseInt(proposalDetailOptionValue[j]) / 10 ** 18;
+                    optionStruct.optionVoteCount = (parseInt(proposalDetailOptionValue[j]) / 10 ** 18).toFixed(2);
                     optionStruct.optionVotePrecentage = proposalObjectConstruct.totalVotes ? ((optionStruct.optionVoteCount * 100) / proposalObjectConstruct.totalVotes).toFixed(0) : 0;
                     proposalObjectConstruct.optionStringArray.push(optionStruct);
                 }
@@ -75,7 +81,7 @@ export default function Home() {
                 for (let j = 0; j < proposalObjectConstruct.numOfVoters; j++) {
                     let voterStruct = {};
                     voterStruct.voterAddress = proposalDetail[5][j];
-                    voterStruct.voterPower = parseInt(proposalDetailVoterPower[j]) / 10 ** 18;
+                    voterStruct.voterPower = (parseInt(proposalDetailVoterPower[j]) / 10 ** 18).toFixed(2);
                     voterStruct.voterChoice = parseInt(proposalDetailVoterChoice[j]);
 
                     proposalObjectConstruct.voterDetailsArray.push(voterStruct);
@@ -104,7 +110,7 @@ export default function Home() {
 
                 let claimOwnTxn = await governorContract.voteInProposal(proposalId, optionChoice);
                 console.log(claimOwnTxn.hash);
-                setTxId(claimOwnTxn.hash);
+                setVoteTxId(claimOwnTxn.hash);
 
                 extractDataFromGovernorContract();
 
@@ -117,6 +123,36 @@ export default function Home() {
         } catch (e) {
             alert(e["message"]);
             setVoteFlag(false);
+        }
+    };
+
+    const claimNFT = async (e) => {
+        try {
+            setClaimFlag(true);
+            console.log(`Claiming NFT... `);
+
+            const { ethereum } = window;
+            if (ethereum) {
+                // Standard metamask setup functions
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const nftMinterContract = new ethers.Contract(nftMinterContractAddress, minterContractABI, signer);
+
+                let claimOwnTxn = await nftMinterContract.mintNFT();
+                console.log(claimOwnTxn.hash);
+                setClaimTxId(claimOwnTxn.hash);
+
+                extractDataFromGovernorContract();
+
+                setClaimFlag(false);
+            } else {
+                alert("Metamask is not installed! Please install it. ");
+            }
+
+            setClaimFlag(false);
+        } catch (e) {
+            alert(e["message"]);
+            setClaimFlag(false);
         }
     };
 
@@ -153,7 +189,7 @@ export default function Home() {
                                     </div>
                                     <div>
                                         <span className="fw-bold font-medium">Proposer:</span>{" "}
-                                        <a href={"https://etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
+                                        <a href={"https://rinkeby.etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
                                             {proposal.author}
                                         </a>
                                     </div>
@@ -178,7 +214,11 @@ export default function Home() {
                                             {proposal.voterDetailsArray.map((item) => {
                                                 return (
                                                     <tr key={item.voterAddress}>
-                                                        <td>{item.voterAddress}</td>
+                                                        <td>
+                                                            <a href={"https://rinkeby.etherscan.io/address/" + item.voterAddress} target="_blank" rel="noreferrer">
+                                                                {item.voterAddress}
+                                                            </a>
+                                                        </td>
                                                         <td>{item.voterPower}</td>
                                                         <td>{proposal.optionStringArray[item.voterChoice].optionName}</td>
                                                     </tr>
@@ -227,11 +267,29 @@ export default function Home() {
                                         <button type="button" className="btn btn-primary btn-lg font-medium" data-tag={count - 1} onClick={voteInGovernor}>
                                             {voteFlag ? "Please Wait..." : "Vote"}
                                         </button>
-                                        <button type="button" className="ms-2 btn btn-success btn-lg font-medium disabled">
-                                            Collect NFT!
+                                        <button type="button" className={`ms-2 btn btn-success btn-lg font-medium" + ${voteTxId ? "" : " disabled"}`} onClick={claimNFT}>
+                                            {claimFlag ? "Please Wait..." : "Collect NFT!"}
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="row">
+                                {voteTxId && (
+                                    <div className="col-12">
+                                        Your vote is successful.
+                                        <a href={"https://rinkeby.etherscan.io/tx/" + voteTxId} target="_blank" rel="noreferrer">
+                                            {voteTxId}
+                                        </a>
+                                    </div>
+                                )}
+                                {claimTxId && (
+                                    <div className="col-12">
+                                        Your NFT claim is successful! Congratz!
+                                        <a href={"https://rinkeby.etherscan.io/tx/" + claimTxId} target="_blank" rel="noreferrer">
+                                            {claimTxId}
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

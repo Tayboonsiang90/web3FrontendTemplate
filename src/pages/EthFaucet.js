@@ -58,6 +58,7 @@ export default function EthFaucet() {
                 <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
                     {faucetFlag ? "Please Wait..." : "Get 0.1 Rinkeby ETH"}
                 </button>
+                <p>If the page is stuck, try reloading and claim again. Thank you!</p>
                 <p>Only take what you need from this faucet!</p>
                 {txId && (
                     <div>
