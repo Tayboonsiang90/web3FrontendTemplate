@@ -1,31 +1,35 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import React, { useEffect } from "react";
-import "./App.css";
+/* IMPORTING DEPENDENCIES
+*/
+// React Imports
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; 
+import React, { useEffect } from "react"; 
+// Styling 
+import "./App.css"; // Global Styling
+import logo from "./media/logo.jpg"; // Innovation Team Logo
+// Pages import for <Link></Link> to work
 import EthFaucet from "./pages/EthFaucet";
 import VoteFaucet from "./pages/VoteFaucet";
 import Home from "./pages/Home";
-import Tokenomics from "./pages/Tokenomics";
+// Contexts Import
 import { useGlobalContext } from "./contexts/globalProvider";
+// Web3 Import
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-import logo from "./media/logo.jpg";
 
-// // Environment Variables
-// Replace with your API Key
-const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
-// Replace with the contract deployer address
-const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
-// Replace with address of Vote Token
-const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7";
-// Governor Contract
-const governorAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717";
+/* ENVIRONMENT VARIABLES (EXPOSED)
+*/
+const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
+const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7"; // ERC20 Vote Token Address
 
-// Standard sleep function
+/* STANDARD FUNCTIONS
+*/
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
 }
 
+/* REACT APP
+*/
 function App() {
     // Initialize an alchemy-web3 instance:
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
@@ -171,7 +175,7 @@ function App() {
                             </li>
                             <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/">
-                                    Home
+                                    Vote
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
@@ -236,6 +240,7 @@ function App() {
                     </div>
                 </div>
             </nav>
+            {/* Main  */}
             <div className="container">
                 {/* Dismissable alert about the state of the user's metamask */}
                 {!metamaskExistCheck && (
@@ -294,6 +299,28 @@ function App() {
                         <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 )}
+            </div>
+            {/* Informational Modal  */}
+            <div className="modal fade" id="home" tabindex="-1">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">
+                                Modal title
+                            </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div className="modal-body">...</div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" className="btn btn-primary">
+                                Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <Routes>
                 {/* Home route */}
