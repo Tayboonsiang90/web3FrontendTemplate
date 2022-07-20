@@ -288,6 +288,9 @@ export default function Home() {
                                         <a href={"https://rinkeby.etherscan.io/tx/" + claimTxId} target="_blank" rel="noreferrer">
                                             {claimTxId}
                                         </a>
+                                        <a href={"https://testnets.opensea.io/account/" + currentAccountAddress} target="_blank" rel="noreferrer">
+                                            View your NFT here!
+                                        </a>
                                     </div>
                                 )}
                             </div>
