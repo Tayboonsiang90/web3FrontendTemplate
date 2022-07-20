@@ -43,7 +43,7 @@ export default function EthFaucet() {
     return (
         <React.Fragment>
             <div className="container mt-5">
-                <h1>This is a Rinkeby ETH faucet. Get your free ETH here!</h1>
+                <h1 className="font-gold font-big">This is a Rinkeby ETH faucet. Get your free ETH here!</h1>
                 <h3>ETH is used to pay for transactions (gas fees).</h3>
                 <h4>Current Faucet ETH Level: {faucetEthLevel} ETH</h4>
 

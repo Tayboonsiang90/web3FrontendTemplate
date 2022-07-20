@@ -301,7 +301,7 @@ function App() {
                 )}
             </div>
             {/* Informational Modal  */}
-            <div className="modal fade" id="home" tabindex="-1">
+            <div className="modal fade" id="home" tabIndex="-1">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
