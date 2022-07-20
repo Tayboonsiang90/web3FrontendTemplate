@@ -473,9 +473,17 @@ export default function Home() {
                                 Close
                             </button>
                             <button type="button" className="btn btn-primary" onClick={createNewProposal}>
-                                Submit Proposal Onchain
+                                {createFlag ? "Please Wait..." : "Submit Proposal Onchain"}
                             </button>
                         </div>
+                        {createTxId && (
+                            <div className="col-12">
+                                Your vote is successful.
+                                <a href={"https://rinkeby.etherscan.io/tx/" + createTxId} target="_blank" rel="noreferrer">
+                                    {createTxId}
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
