@@ -37,13 +37,13 @@ export default function Link1() {
     const checkFaucetEth = async () => {
         console.log("Checking faucet levels for", deployerAddress);
         const data = await web3.eth.getBalance(deployerAddress, "latest");
-        setFaucetEthLevel((data/10**18).toFixed(1));
+        setFaucetEthLevel((data / 10 ** 18).toFixed(1));
     };
 
     return (
         <React.Fragment>
             <div className="container mt-5">
-                <h1 className="font-gold font-big">This is a Rinkeby ETH faucet. Get your free ETH here!</h1>
+                <h1 className="font-gold-big font-big">This is a Rinkeby ETH faucet. Get your free ETH here!</h1>
                 <h3>ETH is used to pay for transactions (gas fees).</h3>
                 <h4>Current Faucet ETH Level: {faucetEthLevel} ETH</h4>
 

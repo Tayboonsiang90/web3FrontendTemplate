@@ -77,7 +77,7 @@ export default function Link2() {
     return (
         <React.Fragment>
             <div className="container mt-5">
-                <h1 className="font-gold font-big">Have no voting power? Get 100 free VOTE tokens here!</h1>
+                <h1 className="font-gold-big font-big">Have no voting power? Get 100 free VOTE tokens here!</h1>
                 <h3>VOTE token represents your voting power. They can be traded, transferred, delegated. </h3>
                 {currentAccountVoteBal == 0 && (
                     <button type="button" className="btn btn-primary btn-lg" onClick={claimFaucet}>
@@ -98,7 +98,7 @@ export default function Link2() {
                     </div>
                 )}
                 <div className="mt-5">
-                    <h1 className="font-gold font-big">Want more voting power?</h1>
+                    <h1 className="font-gold-big font-big">Want more voting power?</h1>
                     <a href="https://app.uniswap.org/#/swap?chain=rinkeby&inputCurrency=ETH&outputCurrency=0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7" target="_blank" rel="noreferrer">
                         <button className="btn btn-secondary btn-lg">Buy more VOTE tokens with your Rinkeby ETH.</button>
                     </a>

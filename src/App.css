@@ -2,27 +2,19 @@
     border: 1px solid red;
 }
 
-.font-gold {
+.font-gold-big {
     color: #ff9900;
-}
-
-.font-white {
-    color: #f0f0f0;
-}
-
-.font-big {
     font-family: "Tourney", cursive;
     font-weight: 700;
-    font-weight: bold;
+    font-size: large;
 }
 
-.font-small {
+.font-fancy {
     font-family: "Tourney", cursive;
-    font-weight: 900;
-    font-weight: bold;
+    font-weight: 700;
 }
 
-.font-medium {
+.font-alert {
     font-family: "Source Code Pro", monospace;
 }
 

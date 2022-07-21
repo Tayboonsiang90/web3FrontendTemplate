@@ -165,68 +165,69 @@ function App() {
             {/* Navbar  */}
             <nav className="navbar navbar-expand-lg bg-dark mb-3">
                 <div className="container-fluid">
+                    {/* Logo  */}
+                    <img className="me-3" src={logo} alt="Logo" style={{ width: "20vh" }} />
+                    {/* Dropdown Button  */}
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse d-flex justify-content-between align-items-center" id="navbarNav">
-                        <ul className="navbar-nav d-flex align-items-center">
-                            <li className="nav-item pe-4">
-                                <img className="me-3" src={logo} alt="Logo" style={{ width: "20vh" }} />
-                            </li>
-                            <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold font-small" to="/">
+                    {/* Expandable NavLinks  */}
+                    <div className="collapse navbar-collapse" id="navbarNav">
+                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li className="nav-item pe-4 text-center">
+                                <Link className="nav-link font-gold-big" to="/">
                                     Home
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold font-small" to="/Link1">
+                                <Link className="nav-link font-gold-big" to="/Link1">
                                     Link 1
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold font-small" to="/Link2">
+                                <Link className="nav-link font-gold-big" to="/Link2">
                                     Link 2
                                 </Link>
                             </li>
-                            {currentAccountAddress && (
-                                <>
-                                    <li className="nav-item pe-4">
-                                        <div className="font-white text-end font-medium">
-                                            <div>
-                                                Connected to{" "}
-                                                <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
-                                                    {currentAccountAddress}
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
-                                            </div>
-                                            <div>
-                                                <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item pe-4">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary btn-lg font-medium"
-                                            onClick={() => {
-                                                setCurrentAccountAddress("");
-                                            }}
-                                        >
-                                            Disconnect
-                                        </button>
-                                    </li>
-                                </>
-                            )}
-                            {!currentAccountAddress && (
-                                <li className="nav-item pe-4">
-                                    <button type="button" className="btn btn-primary btn-lg font-medium" onClick={connectWallet}>
-                                        Connect Wallet
-                                    </button>
-                                </li>
-                            )}
                         </ul>
+                        {currentAccountAddress && (
+                            <>
+                                <div className="nav-item pe-2 d-flex justify-content-center">
+                                    <div className="text-white text-end font-alert">
+                                        <div>
+                                            Connected to{" "}
+                                            <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
+                                                {currentAccountAddress}
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
+                                        </div>
+                                        <div>
+                                            <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="nav-item d-flex justify-content-center">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary btn-lg font-alert"
+                                        onClick={() => {
+                                            setCurrentAccountAddress("");
+                                        }}
+                                    >
+                                        Disconnect
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                        {!currentAccountAddress && (
+                            <div className="nav-item d-flex justify-content-center">
+                                <button type="button" className="btn btn-primary btn-lg font-alert" onClick={connectWallet}>
+                                    Connect Wallet
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </nav>

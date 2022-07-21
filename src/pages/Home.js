@@ -16,7 +16,7 @@ import axios from "axios";
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717"; // Governor Contract Address
 const nftMinterContractAddress = "0x3F14CC30ED2f2c7f35f4172aEa4fb98A3ab52D1A"; // NFT Minter Contract Address
-const MINUTE_MS = 5000; // Pull new data Timing (ms)
+const MINUTE_MS = 60000; // Pull new data Timing (ms)
 const API_URL = "https://rinkeby-faucet-phillip.herokuapp.com/"; // Heroku faucet backend
 
 /* STANDARD FUNCTIONS
@@ -302,25 +302,25 @@ export default function Home() {
                             <div className="row">
                                 <div className="col-9">
                                     <div>
-                                        <span className="fw-bold font-medium">Description:</span> {proposal.description}
+                                        <span className="fw-bold font-alert">Description:</span> {proposal.description}
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Proposer:</span>{" "}
+                                        <span className="fw-bold font-alert">Proposer:</span>{" "}
                                         <a href={"https://rinkeby.etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
                                             {proposal.author}
                                         </a>
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date/Time Submitted:</span> {proposal.datetimeCreated.toString()}
+                                        <span className="fw-bold font-alert">Date/Time Submitted:</span> {proposal.datetimeCreated.toString()}
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date/Time Expiring:</span> {proposal.datetimeExpire.toString()}
+                                        <span className="fw-bold font-alert">Date/Time Expiring:</span> {proposal.datetimeExpire.toString()}
                                     </div>
                                     {/* <div>
-                                        <span className="fw-bold font-medium">Date Time Created:</span>
+                                        <span className="fw-bold font-alert">Date Time Created:</span>
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date Time Expiring:</span>
+                                        <span className="fw-bold font-alert">Date Time Expiring:</span>
                                     </div> */}
                                     <table className="table border mt-5 border-dark">
                                         <thead>
@@ -384,10 +384,10 @@ export default function Home() {
                                         })}
                                     </select>
                                     <div className="mt-2">
-                                        <button type="button" className="btn btn-primary btn-lg font-medium" data-tag={count - 1} onClick={voteInGovernor}>
+                                        <button type="button" className="btn btn-primary btn-lg font-alert" data-tag={count - 1} onClick={voteInGovernor}>
                                             {voteFlag ? "Please Wait..." : "Vote"}
                                         </button>
-                                        <button type="button" className={`ms-2 btn btn-success btn-lg font-medium" + ${voteTxId ? "" : " disabled"}`} onClick={claimNFT}>
+                                        <button type="button" className={`ms-2 btn btn-success btn-lg font-alert" + ${voteTxId ? "" : " disabled"}`} onClick={claimNFT}>
                                             {claimFlag ? "Please Wait..." : "Collect NFT!"}
                                         </button>
                                     </div>
@@ -449,25 +449,25 @@ export default function Home() {
                             <div className="row">
                                 <div className="col-9">
                                     <div>
-                                        <span className="fw-bold font-medium">Description:</span> {proposal.description}
+                                        <span className="fw-bold font-alert">Description:</span> {proposal.description}
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Proposer:</span>{" "}
+                                        <span className="fw-bold font-alert">Proposer:</span>{" "}
                                         <a href={"https://rinkeby.etherscan.io/address/" + proposal.author} target="_blank" rel="noreferrer">
                                             {proposal.author}
                                         </a>
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date/Time Submitted:</span> {proposal.datetimeCreated.toString()}
+                                        <span className="fw-bold font-alert">Date/Time Submitted:</span> {proposal.datetimeCreated.toString()}
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date/Time Expiring:</span> {proposal.datetimeExpire.toString()}
+                                        <span className="fw-bold font-alert">Date/Time Expiring:</span> {proposal.datetimeExpire.toString()}
                                     </div>
                                     {/* <div>
-                                        <span className="fw-bold font-medium">Date Time Created:</span>
+                                        <span className="fw-bold font-alert">Date Time Created:</span>
                                     </div>
                                     <div>
-                                        <span className="fw-bold font-medium">Date Time Expiring:</span>
+                                        <span className="fw-bold font-alert">Date Time Expiring:</span>
                                     </div> */}
                                     <table className="table border mt-5 border-dark">
                                         <thead>
@@ -531,7 +531,7 @@ export default function Home() {
                                         })}
                                     </select>
                                     <div className="mt-2">
-                                        <button type="button" className="btn btn-primary btn-lg font-medium" disabled>
+                                        <button type="button" className="btn btn-primary btn-lg font-alert" disabled>
                                             Expired
                                         </button>
                                     </div>
@@ -588,7 +588,7 @@ export default function Home() {
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-heading">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse" aria-expanded="false" aria-controls="flush-collapse">
-                                <b className="font-gold">Frequently Asked Questions (FAQ)</b>
+                                <b className="font-gold-big">Frequently Asked Questions (FAQ)</b>
                             </button>
                         </h2>
                         <div id="flush-collapse" class="accordion-collapse collapse" aria-labelledby="flush-heading" data-bs-parent="#accordionFaq">
@@ -676,18 +676,18 @@ export default function Home() {
                 </div>
                 <h1 className="mt-5">
                     Active Proposal List
-                    <button type="button" className="ms-5 btn btn-success btn-lg font-medium" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" className="ms-5 btn btn-success btn-lg font-alert" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Create a new Proposal
                     </button>
                 </h1>
                 {/* Accordion containing a list of proposals */}
-                <div className={activeProposalList.length ? "d-none" : "h1 font-gold font-small"}>Loading...</div>
+                <div className={activeProposalList.length ? "d-none" : "h1 font-gold-big"}>Loading...</div>
                 <div className="accordion mt-5 w-100" id="accordionActive">
                     {displayActiveProposal()}
                 </div>
                 <h1 className="mt-5">Expired Proposal List</h1>
                 {/* Accordion containing a list of proposals */}
-                <div className={activeProposalList.length ? "d-none" : "h1 font-gold font-small"}>Loading...</div>
+                <div className={activeProposalList.length ? "d-none" : "h1 font-gold-big"}>Loading...</div>
                 <div className="accordion mt-5 w-100" id="accordionExample">
                     {displayExpiredProposal()}
                 </div>
