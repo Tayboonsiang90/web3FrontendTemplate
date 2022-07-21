@@ -175,28 +175,18 @@ function App() {
                             </li>
                             <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/">
-                                    Vote
+                                    Home
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/EthFaucet">
-                                    Claim ETH
+                                    Link 1
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
                                 <Link className="nav-link font-gold font-small" to="/VoteFaucet">
-                                    Claim VOTE
+                                    Link 2
                                 </Link>
-                            </li>
-                            <li className="nav-item pe-4 text-center h3">
-                                <a href="https://app.uniswap.org/#/swap?chain=rinkeby&inputCurrency=ETH&outputCurrency=0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7" className="font-gold font-small" target="_blank" rel="noreferrer">
-                                    Trade VOTE
-                                </a>
-                            </li>
-                            <li className="nav-item pe-4 text-center h3">
-                                <a href="https://rinkeby.etherscan.io/token/0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7#balances" className="font-gold font-small" target="_blank" rel="noreferrer">
-                                    Tokenomics
-                                </a>
                             </li>
                             {currentAccountAddress && (
                                 <>
