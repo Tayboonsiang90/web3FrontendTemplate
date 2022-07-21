@@ -10,6 +10,7 @@ import logo from "./media/logo.jpg"; // Innovation Team Logo
 import Link1 from "./pages/Link1";
 import Link2 from "./pages/Link2";
 import Home from "./pages/Home";
+import FAQ from "./pages/FAQ";
 // Contexts Import
 import { useGlobalContext } from "./contexts/globalProvider";
 // Web3 Import
@@ -166,7 +167,7 @@ function App() {
             <nav className="navbar navbar-expand-lg bg-dark mb-3">
                 <div className="container-fluid">
                     {/* Logo  */}
-                    <img className="me-3" src={logo} alt="Logo" style={{ width: "20vh" }} />
+                    <img className="me-3" src={logo} alt="Logo" style={{ width: "25vh" }} />
                     {/* Dropdown Button  */}
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span className="navbar-toggler-icon"></span>
@@ -174,25 +175,30 @@ function App() {
                     {/* Expandable NavLinks  */}
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item pe-4 text-center">
-                                <Link className="nav-link font-gold-big" to="/">
+                            <li className="nav-item pe-2 text-center">
+                                <Link className="nav-link font-gold-big text-nowrap" to="/">
                                     Home
                                 </Link>
                             </li>
-                            <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold-big" to="/Link1">
+                            <li className="nav-item pe-2 text-center">
+                                <Link className="nav-link font-gold-big text-nowrap" to="/Link1">
                                     Link 1
                                 </Link>
                             </li>
-                            <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold-big" to="/Link2">
+                            <li className="nav-item pe-2 text-center">
+                                <Link className="nav-link font-gold-big text-nowrap" to="/Link2">
                                     Link 2
+                                </Link>
+                            </li>
+                            <li className="nav-item pe-2 text-center">
+                                <Link className="nav-link font-gold-big text-nowrap" to="/FAQ">
+                                    FAQ
                                 </Link>
                             </li>
                         </ul>
                         {currentAccountAddress && (
                             <>
-                                <div className="nav-item pe-2 d-flex justify-content-center">
+                                <div className="nav-item pe-3 d-flex justify-content-center">
                                     <div className="text-white text-end font-alert">
                                         <div>
                                             Connected to{" "}
@@ -307,6 +313,9 @@ function App() {
 
                 {/* Link 2 route */}
                 <Route path="/Link2" element={<Link2 />} />
+
+                {/* FAQ route */}
+                <Route path="/FAQ" element={<FAQ />} />
             </Routes>
         </Router>
     );

@@ -16,7 +16,7 @@ import axios from "axios";
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717"; // Governor Contract Address
 const nftMinterContractAddress = "0x3F14CC30ED2f2c7f35f4172aEa4fb98A3ab52D1A"; // NFT Minter Contract Address
-const MINUTE_MS = 60000; // Pull new data Timing (ms)
+const MINUTE_MS = 100000; // Pull new data Timing (ms)
 const API_URL = "https://rinkeby-faucet-phillip.herokuapp.com/"; // Heroku faucet backend
 
 /* STANDARD FUNCTIONS
