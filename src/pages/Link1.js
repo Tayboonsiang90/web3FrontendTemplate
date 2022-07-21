@@ -11,7 +11,7 @@ const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB";
 // Replace with the contract deployer address
 const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
 
-export default function EthFaucet() {
+export default function Link1() {
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
 
     let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();

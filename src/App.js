@@ -1,14 +1,14 @@
 /* IMPORTING DEPENDENCIES
-*/
+ */
 // React Imports
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; 
-import React, { useEffect } from "react"; 
-// Styling 
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+// Styling
 import "./App.css"; // Global Styling
 import logo from "./media/logo.jpg"; // Innovation Team Logo
 // Pages import for <Link></Link> to work
-import EthFaucet from "./pages/EthFaucet";
-import VoteFaucet from "./pages/VoteFaucet";
+import Link1 from "./pages/Link1";
+import Link2 from "./pages/Link2";
 import Home from "./pages/Home";
 // Contexts Import
 import { useGlobalContext } from "./contexts/globalProvider";
@@ -16,12 +16,12 @@ import { useGlobalContext } from "./contexts/globalProvider";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
 /* ENVIRONMENT VARIABLES (EXPOSED)
-*/
+ */
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
 const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7"; // ERC20 Vote Token Address
 
 /* STANDARD FUNCTIONS
-*/
+ */
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -29,7 +29,7 @@ function sleep(ms) {
 }
 
 /* REACT APP
-*/
+ */
 function App() {
     // Initialize an alchemy-web3 instance:
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
@@ -179,12 +179,12 @@ function App() {
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold font-small" to="/EthFaucet">
+                                <Link className="nav-link font-gold font-small" to="/Link1">
                                     Link 1
                                 </Link>
                             </li>
                             <li className="nav-item pe-4 text-center h3">
-                                <Link className="nav-link font-gold font-small" to="/VoteFaucet">
+                                <Link className="nav-link font-gold font-small" to="/Link2">
                                     Link 2
                                 </Link>
                             </li>
@@ -274,21 +274,6 @@ function App() {
                         <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 )}
-                {/* Dismissable alert about your ETH balance and a reminder to claim from faucet */}
-                {currentChainId == 4 && metamaskExistCheck && !currentAccountVoteBal && (
-                    <div className={"alert alert-warning alert-dismissible fade show"} role="alert">
-                        <div>
-                            <strong>You do not have enough VOTE to make any vote. Get 100 VOTE from the faucet! </strong>
-                            <button className="btn btn-primary">
-                                <Link className="nav-link" to="/VoteFaucet">
-                                    VOTE Faucet
-                                </Link>
-                            </button>
-                        </div>
-                        <div>You will not be able to vote until you get some VOTE tokens. </div>
-                        <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                )}
             </div>
             {/* Informational Modal  */}
             <div className="modal fade" id="home" tabIndex="-1">
@@ -316,11 +301,11 @@ function App() {
                 {/* Home route */}
                 <Route path="/" element={<Home />} />
 
-                {/* EthFaucet route */}
-                <Route path="/EthFaucet" element={<EthFaucet />} />
+                {/* Link 1 route */}
+                <Route path="/Link1" element={<Link1 />} />
 
-                {/* VoteFaucet route */}
-                <Route path="/VoteFaucet" element={<VoteFaucet />} />
+                {/* Link 2 route */}
+                <Route path="/Link2" element={<Link2 />} />
             </Routes>
         </Router>
     );
