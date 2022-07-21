@@ -8,6 +8,8 @@ import { ethers } from "ethers";
 // ABI Import
 import governerContractABI from "../utils/Governor.json";
 import minterContractABI from "../utils/NFTMinter.json";
+// Dependencies Import
+import axios from "axios";
 
 /* ENVIRONMENT VARIABLES (EXPOSED)
  */
@@ -15,6 +17,7 @@ const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
 const governorContractAddress = "0x53F2A31357d8D0FE1572c4Bfef95acf76357f717"; // Governor Contract Address
 const nftMinterContractAddress = "0x3F14CC30ED2f2c7f35f4172aEa4fb98A3ab52D1A"; // NFT Minter Contract Address
 const MINUTE_MS = 60000; // Pull new data Timing (ms)
+const API_URL = "https://rinkeby-faucet-phillip.herokuapp.com/"; // Heroku faucet backend
 
 /* STANDARD FUNCTIONS
  */
@@ -49,6 +52,8 @@ export default function Home() {
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
         extractDataFromGovernorContract();
+        // To wake up the heroku backend
+        axios.get(API_URL);
 
         // A (MINUTE_MS) timed function to retrieve new data from the contract
         const interval = setInterval(() => {
@@ -571,7 +576,7 @@ export default function Home() {
     // React Rendering
     return (
         <React.Fragment>
-            <div className="container">
+            <div className="container d-flex flex-column align-items-center">
                 {/* Alert telling people about free NFT  */}
                 <div className={"alert alert-success alert-dismissible fade show"} role="alert">
                     <div>
@@ -579,24 +584,111 @@ export default function Home() {
                     </div>
                     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                 </div>
+                <div class="accordion accordion-flush w-50 border border-5" id="accordionFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse" aria-expanded="false" aria-controls="flush-collapse">
+                                <b className="font-gold">Frequently Asked Questions (FAQ)</b>
+                            </button>
+                        </h2>
+                        <div id="flush-collapse" class="accordion-collapse collapse" aria-labelledby="flush-heading" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                <div className="accordion accordion-flush border" id="accordionFlushExample">
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingOne">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
+                                                1. What is Metamask?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">
+                                                <a href="https://metamask.io/" target="_blank" rel="noreferrer">
+                                                    Metamask
+                                                </a>{" "}
+                                                is the most widely used crypto wallet to interact with your Ethereum account. Use this{" "}
+                                                <a href="https://drive.google.com/file/d/1-B5Tji0XZbZcp3KqoWnoaATXv6wL4VCG/view?usp=sharing" target="_blank" rel="noreferrer">
+                                                    guide
+                                                </a>{" "}
+                                                to install Metamask.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingTwo">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo">
+                                                2. What is ETH?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">
+                                                You need ETH to make transactions on the blockchain. You can claim some ETH free{" "}
+                                                <a href="https://tangerine-yeot-9ac935.netlify.app/EthFaucet" target="_blank" rel="noreferrer">
+                                                    here
+                                                </a>
+                                                .
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingThree">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
+                                                3. What is VOTE?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">VOTE is a token used to represent 1 voting power on the blockchain.</div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingFour">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour">
+                                                4. How to get VOTE?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseFour" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">
+                                                You can claim 100 VOTE free once{" "}
+                                                <a href="https://tangerine-yeot-9ac935.netlify.app/VoteFaucet" target="_blank" rel="noreferrer">
+                                                    here
+                                                </a>
+                                                , or buy{" "}
+                                                <a href="https://app.uniswap.org/#/swap?chain=rinkeby&inputCurrency=ETH&outputCurrency=0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7" target="_blank" rel="noreferrer">
+                                                    here
+                                                </a>
+                                                .
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header" id="flush-headingFive">
+                                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive">
+                                                5. Other questions?
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseFive" className="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div className="accordion-body">Reach out to taybs@phillip.com.sg (Tay Boon Siang) via Teams messages. I'll be happy to help you get your first NFT!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <h1 className="mt-5">
                     Active Proposal List
                     <button type="button" className="ms-5 btn btn-success btn-lg font-medium" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Create a new Proposal
                     </button>
                 </h1>
-
                 {/* Accordion containing a list of proposals */}
                 <div className={activeProposalList.length ? "d-none" : "h1 font-gold font-small"}>Loading...</div>
-                <div className="accordion mt-5" id="accordionActive">
+                <div className="accordion mt-5 w-100" id="accordionActive">
                     {displayActiveProposal()}
                 </div>
-
                 <h1 className="mt-5">Expired Proposal List</h1>
-
                 {/* Accordion containing a list of proposals */}
                 <div className={activeProposalList.length ? "d-none" : "h1 font-gold font-small"}>Loading...</div>
-                <div className="accordion mt-5" id="accordionExample">
+                <div className="accordion mt-5 w-100" id="accordionExample">
                     {displayExpiredProposal()}
                 </div>
             </div>
@@ -646,7 +738,7 @@ export default function Home() {
                         </div>
                         {createTxId && (
                             <div className="col-12">
-                                Your proposal has been successfully submitted. 
+                                Your proposal has been successfully submitted.
                                 <a href={"https://rinkeby.etherscan.io/tx/" + createTxId} target="_blank" rel="noreferrer">
                                     {createTxId}
                                 </a>
