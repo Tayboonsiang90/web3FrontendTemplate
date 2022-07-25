@@ -6,13 +6,23 @@ import React, { useEffect } from "react";
 // Styling
 import "./App.css"; // Global Styling
 import logo from "./media/logo.jpg"; // Innovation Team Logo
+// MUI Imports
+import { AppBar, Box, Button, Toolbar, IconButton } from "@mui/material"; // For the Navbar
+import MenuIcon from "@mui/icons-material/Menu"; // For the Navbar
+import { Drawer, CssBaseline, List, Typography, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"; // For the Sidebar
+
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 // Pages import for <Link></Link> to work
 import Link1 from "./pages/Link1";
 import Link2 from "./pages/Link2";
 import Home from "./pages/Home";
 import FAQ from "./pages/FAQ";
+// Components Import
+import NavBar from "./components/NavBar";
+
 // Contexts Import
-import { useGlobalContext } from "./contexts/globalProvider";
+import { useMetamaskWalletContext } from "./contexts/metamaskWalletProvider";
 // Web3 Import
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -20,6 +30,7 @@ import { createAlchemyWeb3 } from "@alch/alchemy-web3";
  */
 const apiKey = "O2R9-YptcrXeygM_lYXcmBcnQvlxnUtB"; // Alchemy API Key
 const voteTokenERC20Address = "0x257D9Cf29c6f26806c94794a7F39Ee3c28cD28e7"; // ERC20 Vote Token Address
+const drawerWidth = 240; // Width of Drawer, MUI
 
 /* STANDARD FUNCTIONS
  */
@@ -36,7 +47,7 @@ function App() {
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
 
     // Global Contexts Extraction
-    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
+    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useMetamaskWalletContext();
 
     // Component Did Mount (Runs once on mounting)
     useEffect(() => {
@@ -163,80 +174,60 @@ function App() {
 
     return (
         <Router>
-            {/* Navbar  */}
-            <nav className="navbar navbar-expand-lg bg-dark mb-3">
-                <div className="container-fluid">
-                    {/* Logo  */}
-                    <img className="me-3" src={logo} alt="Logo" style={{ width: "25vh" }} />
-                    {/* Dropdown Button  */}
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    {/* Expandable NavLinks  */}
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item pe-2 text-center">
-                                <Link className="nav-link font-gold-big text-nowrap" to="/">
-                                    Home
-                                </Link>
-                            </li>
-                            <li className="nav-item pe-2 text-center">
-                                <Link className="nav-link font-gold-big text-nowrap" to="/Link1">
-                                    Link 1
-                                </Link>
-                            </li>
-                            <li className="nav-item pe-2 text-center">
-                                <Link className="nav-link font-gold-big text-nowrap" to="/Link2">
-                                    Link 2
-                                </Link>
-                            </li>
-                            <li className="nav-item pe-2 text-center">
-                                <Link className="nav-link font-gold-big text-nowrap" to="/FAQ">
-                                    FAQ
-                                </Link>
-                            </li>
-                        </ul>
-                        {currentAccountAddress && (
-                            <>
-                                <div className="nav-item pe-3 d-flex justify-content-center">
-                                    <div className="text-white text-end font-alert">
-                                        <div>
-                                            Connected to{" "}
-                                            <a href={"https://rinkeby.etherscan.io/address/" + currentAccountAddress} target="_blank" rel="noreferrer">
-                                                {currentAccountAddress}
-                                            </a>
-                                        </div>
-                                        <div>
-                                            <i className="fa-brands fa-ethereum"></i> ETH Balance: {currentAccountEthBal}
-                                        </div>
-                                        <div>
-                                            <i className="fa-solid fa-coins"></i> Vote Token Balance: {currentAccountVoteBal}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="nav-item d-flex justify-content-center">
-                                    <button
-                                        type="button"
-                                        className="btn btn-primary btn-lg font-alert"
-                                        onClick={() => {
-                                            setCurrentAccountAddress("");
-                                        }}
-                                    >
-                                        Disconnect
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                        {!currentAccountAddress && (
-                            <div className="nav-item d-flex justify-content-center">
-                                <button type="button" className="btn btn-primary btn-lg font-alert" onClick={connectWallet}>
-                                    Connect Wallet
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </nav>
+            <Box sx={{ display: "flex" }}>
+                {/* Navbar  */}
+                {NavBar()}
+                {/* Sidebar */}
+                <Drawer
+                    variant="permanent"
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+                    }}
+                >
+                    <Toolbar />
+                    <Box sx={{ overflow: "auto" }}>
+                        <List>
+                            {["Home", "Link 1", "Link 2"].map((text, index) => (
+                                <ListItem key={text} disablePadding>
+                                    <ListItemButton>
+                                        <ListItemText primary={text} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                        <Divider />
+                        <List>
+                            {["FAQ", "Contact Us"].map((text, index) => (
+                                <ListItem key={text} disablePadding>
+                                    <ListItemButton>
+                                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                                        <ListItemText primary={text} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+                </Drawer>
+                {/* Main Page */}
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                    <Toolbar />
+                    <Routes>
+                        {/* Home route */}
+                        <Route path="/" element={<Home />} />
+
+                        {/* Link 1 route */}
+                        <Route path="/Link1" element={<Link1 />} />
+
+                        {/* Link 2 route */}
+                        <Route path="/Link2" element={<Link2 />} />
+
+                        {/* FAQ route */}
+                        <Route path="/FAQ" element={<FAQ />} />
+                    </Routes>
+                </Box>
+            </Box>
             {/* Main  */}
             <div className="container">
                 {/* Dismissable alert about the state of the user's metamask */}
@@ -282,41 +273,6 @@ function App() {
                     </div>
                 )}
             </div>
-            {/* Informational Modal  */}
-            <div className="modal fade" id="home" tabIndex="-1">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">
-                                Modal title
-                            </h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div className="modal-body">...</div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="button" className="btn btn-primary">
-                                Save changes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <Routes>
-                {/* Home route */}
-                <Route path="/" element={<Home />} />
-
-                {/* Link 1 route */}
-                <Route path="/Link1" element={<Link1 />} />
-
-                {/* Link 2 route */}
-                <Route path="/Link2" element={<Link2 />} />
-
-                {/* FAQ route */}
-                <Route path="/FAQ" element={<FAQ />} />
-            </Routes>
         </Router>
     );
 }

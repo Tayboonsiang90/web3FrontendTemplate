@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGlobalContext } from "../contexts/globalProvider";
+import { useMetamaskWalletContext } from "../contexts/metamaskWalletProvider";
 import abi from "../utils/VoteToken.json";
 import { ethers } from "ethers";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
@@ -21,7 +21,7 @@ function sleep(ms) {
 export default function Link2() {
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
 
-    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
+    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useMetamaskWalletContext();
 
     const [faucetFlag, setFaucetFlag] = useState(false);
     const [txId, setTxId] = useState("");

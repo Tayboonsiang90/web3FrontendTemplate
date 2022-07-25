@@ -2,7 +2,7 @@
  */
 // React Imports
 import React, { useEffect, useState } from "react";
-import { useGlobalContext } from "../contexts/globalProvider";
+import { useMetamaskWalletContext } from "../contexts/metamaskWalletProvider";
 // Web3 Import
 import { ethers } from "ethers";
 // ABI Import
@@ -30,7 +30,7 @@ function sleep(ms) {
 /* REACT APP
  */
 export default function Home() {
-    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
+    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useMetamaskWalletContext();
 
     const [activeProposalList, setActiveProposalList] = useState([]); // Stores all proposals data in an array
     const [expiredProposalList, setExpiredProposalList] = useState([]); // Stores all proposals data in an array

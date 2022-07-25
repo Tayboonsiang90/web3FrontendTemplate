@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useGlobalContext } from "../contexts/globalProvider";
+import { useMetamaskWalletContext } from "../contexts/metamaskWalletProvider";
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
 // // Environment Variables
@@ -14,7 +14,7 @@ const deployerAddress = "0x20022983cDD1DC62Abc6fB880E760d6C7476a249";
 export default function Link1() {
     const web3 = createAlchemyWeb3(`https://eth-rinkeby.alchemyapi.io/v2/${apiKey}`);
 
-    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useGlobalContext();
+    let { currentAccountAddress, metamaskExistCheck, currentChainId, currentAccountEthBal, currentAccountVoteBal, setCurrentAccountAddress, setMetamaskExistCheck, setCurrentChainId, setCurrentAccountEthBal, setCurrentAccountVoteBal } = useMetamaskWalletContext();
 
     const [faucetFlag, setFaucetFlag] = useState(false);
     const [txId, setTxId] = useState("");

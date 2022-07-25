@@ -1,12 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
-import { GlobalProvider } from "./contexts/globalProvider";
+/* Contexts (Global)
+ */
+import { MetamaskWalletProvider } from "./contexts/metamaskWalletProvider";
+/* Material UI Themeing
+ */
+import { ThemeProvider } from "@mui/material/styles";
+import { phillipTheme } from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <GlobalProvider>
-        <App />
-    </GlobalProvider>
+    <ThemeProvider theme={phillipTheme}>
+        <MetamaskWalletProvider>
+            <App />
+        </MetamaskWalletProvider>
+    </ThemeProvider>
 );

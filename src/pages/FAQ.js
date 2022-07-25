@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGlobalContext } from "../contexts/globalProvider";
+import { useMetamaskWalletContext } from "../contexts/metamaskWalletProvider";
 
 // // Environment Variables
 
@@ -11,9 +11,5 @@ function sleep(ms) {
 }
 
 export default function FAQ() {
-
-    return (
-        <React.Fragment>
-        </React.Fragment>
-    );
+    return <React.Fragment></React.Fragment>;
 }
