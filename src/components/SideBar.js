@@ -1,7 +1,7 @@
 /* IMPORTING DEPENDENCIES
  */
 // React Imports
-import { BrowserRouter as Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
 // MUI Imports
 import { Box, Toolbar } from "@mui/material"; // For the Navbar
@@ -32,49 +32,59 @@ export default function SideBar() {
                 <Toolbar sx={{ mt: 1, mb: 1 }} />
                 <Box sx={{ overflow: "auto" }}>
                     <List>
-                        <ListItem disablePadding>
+                        <Link to="/" style={{ textDecoration: "none" }}>
+                            <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <HomeIcon color="secondary"></HomeIcon>
                                     </ListItemIcon>
                                     <ListItemText>Home</ListItemText>
                                 </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <LinkIcon color="secondary"></LinkIcon>
-                                </ListItemIcon>
-                                <ListItemText>Link 1</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <LinkIcon color="secondary"></LinkIcon>
-                                </ListItemIcon>
-                                <ListItemText>Link 2</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
+                            </ListItem>
+                        </Link>
+                        <Link to="/Link1" style={{ textDecoration: "none" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <LinkIcon color="secondary"></LinkIcon>
+                                    </ListItemIcon>
+                                    <ListItemText>Link 1</ListItemText>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                        <Link to="/Link2" style={{ textDecoration: "none" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <LinkIcon color="secondary"></LinkIcon>
+                                    </ListItemIcon>
+                                    <ListItemText color="text">Link 2</ListItemText>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
                     </List>
                     <Divider />
                     <List>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <LiveHelpIcon color="secondary"></LiveHelpIcon>
-                                </ListItemIcon>
-                                <ListItemText>FAQ</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <EmailIcon color="secondary"></EmailIcon>
-                                </ListItemIcon>
-                                <ListItemText>Contact Us</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
+                        <Link to="/FAQ" style={{ textDecoration: "none" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <LiveHelpIcon color="secondary"></LiveHelpIcon>
+                                    </ListItemIcon>
+                                    <ListItemText>FAQ</ListItemText>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                        <Link to="/" style={{ textDecoration: "none" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <EmailIcon color="secondary"></EmailIcon>
+                                    </ListItemIcon>
+                                    <ListItemText>Contact Us</ListItemText>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
                     </List>
                 </Box>
             </Drawer>
