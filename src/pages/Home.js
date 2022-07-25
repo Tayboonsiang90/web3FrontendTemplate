@@ -584,15 +584,15 @@ export default function Home() {
                     </div>
                     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-                <div class="accordion accordion-flush w-50 border border-5" id="accordionFaq">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="flush-heading">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse" aria-expanded="false" aria-controls="flush-collapse">
+                <div className="accordion accordion-flush w-50 border border-5" id="accordionFaq">
+                    <div className="accordion-item">
+                        <h2 className="accordion-header" id="flush-heading">
+                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse" aria-expanded="false" aria-controls="flush-collapse">
                                 <b className="font-gold-big">Frequently Asked Questions (FAQ)</b>
                             </button>
                         </h2>
-                        <div id="flush-collapse" class="accordion-collapse collapse" aria-labelledby="flush-heading" data-bs-parent="#accordionFaq">
-                            <div class="accordion-body">
+                        <div id="flush-collapse" className="accordion-collapse collapse" aria-labelledby="flush-heading" data-bs-parent="#accordionFaq">
+                            <div className="accordion-body">
                                 <div className="accordion accordion-flush border" id="accordionFlushExample">
                                     <div className="accordion-item">
                                         <h2 className="accordion-header" id="flush-headingOne">

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 /* Contexts (Global)
  */
@@ -13,7 +14,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <ThemeProvider theme={phillipTheme}>
         <MetamaskWalletProvider>
-            <App />
+            <Router>
+                <App />
+            </Router>
         </MetamaskWalletProvider>
     </ThemeProvider>
 );

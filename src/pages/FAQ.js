@@ -1,15 +1,18 @@
+/* IMPORTING DEPENDENCIES
+ */ 
+// React Imports
 import React, { useState } from "react";
 import { useMetamaskWalletContext } from "../contexts/metamaskWalletProvider";
+// MUI Imports
 
-// // Environment Variables
+/* ENVIRONMENT VARIABLES (EXPOSED)
+ */
 
-// Standard sleep function
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
+/* STANDARD HELPER FUNCTIONS
+ */
 
+/* REACT APP
+ */
 export default function FAQ() {
     return <React.Fragment></React.Fragment>;
 }

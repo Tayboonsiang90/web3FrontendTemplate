@@ -1,20 +1,15 @@
 /* IMPORTING DEPENDENCIES
  */
-// Pages import for <Link></Link> to work
-import Link1 from "../pages/Link1";
-import Link2 from "../pages/Link2";
-import Home from "../pages/Home";
-import FAQ from "../pages/FAQ";
 // React Imports
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import React, { useEffect } from "react";
+import { BrowserRouter as Link } from "react-router-dom";
+import React from "react";
 // MUI Imports
-import { AppBar, Box, Button, Toolbar, IconButton } from "@mui/material"; // For the Navbar
-import MenuIcon from "@mui/icons-material/Menu"; // For the Navbar
-import { Drawer, CssBaseline, List, Typography, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"; // For the Sidebar
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import { Box, Toolbar } from "@mui/material"; // For the Navbar
+import { Drawer, List, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"; // For the Sidebar
+import LinkIcon from "@mui/icons-material/Link";
+import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 import HomeIcon from "@mui/icons-material/Home";
+import EmailIcon from "@mui/icons-material/Email";
 
 /* ENVIRONMENT VARIABLES (EXPOSED)
  */
@@ -22,13 +17,6 @@ const drawerWidth = 270; // Width of Drawer, MUI
 
 /* STANDARD HELPER FUNCTIONS
  */
-function camelize(str) {
-    // Converts any string to CamelCase
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-        if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-        return index === 0 ? match.toLowerCase() : match.toUpperCase();
-    });
-}
 
 export default function SideBar() {
     return (
@@ -44,29 +32,49 @@ export default function SideBar() {
                 <Toolbar sx={{ mt: 1, mb: 1 }} />
                 <Box sx={{ overflow: "auto" }}>
                     <List>
-                        {["Home", "Link 1", "Link 2"].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <Link to={"/" + text.replace(/\s+/g, "")}>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <HomeIcon></HomeIcon>
-                                        </ListItemIcon>
-                                        <ListItemText primary={text} />
-                                    </ListItemButton>
-                                </Link>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <HomeIcon color="secondary"></HomeIcon>
+                                    </ListItemIcon>
+                                    <ListItemText>Home</ListItemText>
+                                </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <LinkIcon color="secondary"></LinkIcon>
+                                </ListItemIcon>
+                                <ListItemText>Link 1</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <LinkIcon color="secondary"></LinkIcon>
+                                </ListItemIcon>
+                                <ListItemText>Link 2</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                     <Divider />
                     <List>
-                        {["FAQ", "Contact Us"].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <LiveHelpIcon color="secondary"></LiveHelpIcon>
+                                </ListItemIcon>
+                                <ListItemText>FAQ</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <EmailIcon color="secondary"></EmailIcon>
+                                </ListItemIcon>
+                                <ListItemText>Contact Us</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Box>
             </Drawer>
